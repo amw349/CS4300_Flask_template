@@ -6,10 +6,11 @@
     <body>
         <div class="topcorner">
             <p>Project Name: {{ name }}</p>
-            <div>Student Names:
-            {% for id in netid %}
-                <p>{{id}}</p>
-            {% endfor %}
+            <div>
+              <p>Student Names: </p>
+              {% for id in netid %}
+                  <p>{{id}}</p>
+              {% endfor %}
           </div>
         </div>
         <form class="form-inline global-search">
