@@ -43,7 +43,7 @@ def process_list_of_jsons(lst_of_jsons):
                 for d_token in tokenized_description:
                     word_set.add(d_token)
                 for t_token in tags:
-                    tag_set.add(t_token.lower()[1:])
+                    tag_set.add(prepareTag(t_token))
             except:
                 pass
     num_posts = post_count
@@ -91,7 +91,7 @@ def process_list_of_jsons(lst_of_jsons):
                         #Adds the current post to the list of posts matched to that word
                         word_inv_idx[word_to_int_dict[d_token]].append(post_counter)
                 for t_token in tags:
-                    t_token = t_token.lower()[1:]#remove the leading hashtag
+                    t_token = prepareTag(t_token)#remove the leading hashtag
                     if d_token in word_to_int_dict:
                         tag_TDF[post_counter,tag_to_int_dict[t_token]] = 1
                         #Adds the current post index to the list of posts matched to that word
@@ -141,6 +141,9 @@ def removeNonAlpha(text):
     x = 7
     return s.split(' ')
 
+    #removes the hashtag
+def prepareTag(tag):
+    return tag[1:].lower()
     
 # def strip_all_entities(text):
 #     entity_prefixes = ['@','#']
