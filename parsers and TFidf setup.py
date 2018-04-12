@@ -39,11 +39,11 @@ def process_list_of_jsons(lst_of_jsons):
                 tags = post['tags']
 
                 tokenized_description = prepareDescription(description)
-                
-                for d_token in tokenized_description:
-                    word_set.add(d_token)
-                for t_token in tags:
-                    tag_set.add(prepareTag(t_token))
+                if len(tags) != 0:#don't count posts with no tags at least for now
+                    for d_token in tokenized_description:
+                        word_set.add(d_token)
+                    for t_token in tags:
+                        tag_set.add(prepareTag(t_token))
             except:
                 pass
     num_posts = post_count
@@ -85,17 +85,18 @@ def process_list_of_jsons(lst_of_jsons):
                 description = post['description']
                 tags = post['tags']
                 tokenized_description = prepareDescription(description)
-                for d_token in tokenized_description:
-                    if d_token in word_to_int_dict:
-                        word_TDF[post_counter,word_to_int_dict[d_token]] = 1
-                        #Adds the current post to the list of posts matched to that word
-                        word_inv_idx[word_to_int_dict[d_token]].append(post_counter)
-                for t_token in tags:
-                    t_token = prepareTag(t_token)#remove the leading hashtag
-                    if d_token in word_to_int_dict:
-                        tag_TDF[post_counter,tag_to_int_dict[t_token]] = 1
-                        #Adds the current post index to the list of posts matched to that word
-                        tag_inv_idx[tag_to_int_dict[t_token]].append(post_counter)
+                if len(tags) != 0:#don't count posts with no tags at least for this application
+                    for d_token in tokenized_description:
+                        if d_token in word_to_int_dict:
+                            word_TDF[post_counter,word_to_int_dict[d_token]] = 1
+                            #Adds the current post to the list of posts matched to that word
+                            word_inv_idx[word_to_int_dict[d_token]].append(post_counter)
+                    for t_token in tags:
+                        t_token = prepareTag(t_token)#remove the leading hashtag
+                        if d_token in word_to_int_dict:
+                            tag_TDF[post_counter,tag_to_int_dict[t_token]] = 1
+                            #Adds the current post index to the list of posts matched to that word
+                            tag_inv_idx[tag_to_int_dict[t_token]].append(post_counter)
             except:
                 pass
     return word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \
