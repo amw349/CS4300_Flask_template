@@ -17,8 +17,8 @@ returns: word_to_int_dict           maps words to an index in a word vector
         word_TDF                    a matrix where the columns are individual posts and the rows are binary 
                                         values of whether or not the word is in that post
         tag_TDF                     same thing as word_TDF but for tags      
-        word_inv_idx                an inverted index or words to posts
-        tag_inv_idx                 
+        word_inv_idx                an inverted index of words to posts
+        tag_inv_idx                 an inverted index of tags to posts
         post_dict                   maps indicies to their corresponding post
 """
 #in the future chage the argument to a path and use os.listdir(path)
