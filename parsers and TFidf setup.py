@@ -14,11 +14,12 @@ returns: word_to_int_dict           maps words to an index in a word vector
         tag_to_int_dict             maps words to an index in a tag vector
         int_to_word_dict            maps indicies to words in a word vector
         int_to_tag_dict             maps indicies to words in a word vector
-        word_TDF
-        tag_TDF
-        word_inv_idx
-        tag_inv_idx
-        post_dict
+        word_TDF                    a matrix where the columns are individual posts and the rows are binary 
+                                        values of whether or not the word is in that post
+        tag_TDF                     same thing as word_TDF but for tags      
+        word_inv_idx                an inverted index or words to posts
+        tag_inv_idx                 
+        post_dict                   maps indicies to their corresponding post
 """
 #in the future chage the argument to a path and use os.listdir(path)
 def process_list_of_jsons(lst_of_jsons):
