@@ -1,38 +1,27 @@
-@media (min-width: 1200px) {
-.container {
-    max-width: 970px;
+html, body{
+  background-color: #2E4057;
+  color: #ffffff;
 }
+
+.container{
+  margin-top: 5%;
 }
-@media (min-width:400px){
-.global-search {
-padding: 20px 0;
-text-align:center;
+
+label{
+  font-weight: normal;
 }
-body {
-padding-top: 15%;
-padding-bottom: 15px;
+
+.btn-info{
+  flex-direction: row;
+  background-color: #FFC857;
+  border-color: #FFC857;
 }
-.global-search {
-text-align:center;
-padding:10px;
+
+.btn-info:hover{
+  background-color: #FFC857;
+  border-color: #FFC857;
 }
-.global-search .form-control {
-width:500px;
-}
-.global-search * {
-display:inline-block;
-margin-bottom:0;
-}
-}
-.topcorner{
-position:absolute;
-top:2%;
-right:2%;
-}
-.btn{
-background-color: #4285F4;
-border: none
-}
-.step-links a{
-color: #4285F4;
+
+.help-inline{
+  color: #FF0000;
 }

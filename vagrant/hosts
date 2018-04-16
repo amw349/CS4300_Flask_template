@@ -1,2 +1,2 @@
 [webservers]
- 34.215.223.179 ansible_ssh_user=ubuntu
+54.149.230.230 ansible_ssh_user=ubuntu

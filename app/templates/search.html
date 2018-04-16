@@ -1,44 +1,47 @@
 <html>
-    <head>
-        <link rel="stylesheet" href="/static/bootstrap.min.css">
-        <link rel="stylesheet" href="/static/main.css">
-    </head>
-    <body>
-        <div class="topcorner">
-            <p>Project Name: {{ name }}</p>
-            <div>
-              <p>Student Names: </p>
-              {% for id in netid %}
-                  <p>{{id}}</p>
-              {% endfor %}
-          </div>
+  <head>
+      <link rel="stylesheet" href="/static/bootstrap.min.css">
+      <link rel="stylesheet" href="/static/main.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1>#yourPictures</h1>
+      {% from "includes/_formHelpers.html" import render_field %}
+      <form class="form-container" method="POST" action="">
+        <h2>Describe your picture</h2>
+        <div class="form-group">
+          {{render_field(form.content, class_="form-control")}}
         </div>
-        <form class="form-inline global-search">
-            <h1 style="font-size: 55px; font-family:Futura; color: #4285F4">
-                C
-                <font color=#EA4335>S</font>
-                <font color=#FBBC05>4</font>
-                3
-                <font color=#34A853>0</font>
-                <font color=#EA4335>0</font>
-            </h1>
-
-            <br><br>
-
-            <div class="form-group">
-                <input id="input" type="text" name="search" class="form-control" placeholder="Your Input">
-            </div>
-            <button type="submit" class="btn btn-info"> Go! </button>
-        </form>
-        <form class="form-inline global-search">
-        {% if data %}
-            <h1>{{output_message}}</h1>
-            {% for d in data %}
-                <br>
-                <p>{{d}}</p>
+        <div class="form-group">
+          {{render_field(form.location, class_="form-control")}}
+        </div>
+        <div class="form-group">
+          {{render_field(form.people, class_="form-control")}}
+        </div>
+        <div class="form-group">
+          {{render_field(form.date, class_="form-control")}}
+        </div>
+        <div class="form-group">
+          {{render_field(form.time, class_="form-control")}}
+        </div>
+        <button type="submit" class="btn btn-info"> generate # </button>
+      </form>
+      <form class="form-inline global-search">
+        {% if output %}
+          <h2>Top #'s to use</h2>
+          <p>
+            {% for tag in output %}
+              <span>{{tag}}</span>
             {% endfor %}
+          <p>
         {% endif %}
-        </form>
-    </body>
-
+      </form>
+        {% if netids %}
+          {% for id in netids %}
+            <span>{{id}}</span>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+  </body>
 </html>
