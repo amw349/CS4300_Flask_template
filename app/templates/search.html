@@ -1,10 +1,12 @@
 <html>
-  <head>
-      <link rel="stylesheet" href="/static/bootstrap.min.css">
-      <link rel="stylesheet" href="/static/main.css">
-  </head>
-  <body>
-    <div class="container">
+<head>
+  <link rel="stylesheet" href="/static/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/main.css">
+</head>
+<body>
+<div class="container">
+  <div class="row">
+    <div class=col-md-6>
       <h1>#yourPictures</h1>
       {% from "includes/_formHelpers.html" import render_field %}
       <form class="form-container" method="POST" action="">
@@ -26,22 +28,27 @@
         </div>
         <button type="submit" class="btn btn-info"> generate # </button>
       </form>
+    </div>
+    <div class=col-md-6>
       <form class="form-inline global-search">
         {% if output %}
-          <h2>Top #'s to use</h2>
-          <p>
-            {% for tag in output %}
-              <span>{{tag}}</span>
-            {% endfor %}
-          <p>
+        <h2>Top #'s to use</h2>
+        <p>
+          {% for tag in output %}
+            <span>{{tag}}</span>
+          {% endfor %}
+        <p>
         {% endif %}
       </form>
-        {% if netids %}
-          {% for id in netids %}
-            <span>{{id}}</span>
-          {% endfor %}
-        {% endif %}
-      </div>
     </div>
-  </body>
+  </div>
+  <footer>
+    {% if netids %}
+      {% for id in netids %}
+        <span>{{id}}</span>
+      {% endfor %}
+    {% endif %}
+  </footer>
+</div>
+</body>
 </html>

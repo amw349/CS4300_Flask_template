@@ -49,7 +49,6 @@ def input_vec(word_to_int_dict, location, keywords):
     for w in words:
         if w in word_to_int_dict:
             vec[word_to_int_dict[w]] = 1
-
     return vec
 
 def input_to_tags(location, keywords):
