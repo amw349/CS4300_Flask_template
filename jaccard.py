@@ -28,7 +28,7 @@ def top_n_tags(n, top_posts):
         for tag in post['tags']:
             tags.append(tag)
 
-    return tags[:n]
+    return tags[:10]
 
 def cleanup(keywords):
     processed = []
@@ -58,10 +58,14 @@ def input_to_tags(location, keywords):
     tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(['profile_davidmiron.json'])
 
     in_vec = input_vec(word_to_int_dict, location, keywords)
-    return top_n_tags(3, top_jaccard_sim(post_dict, in_vec, word_TDF))
+    return top_n_tags(10, top_jaccard_sim(post_dict, in_vec, word_TDF))
 
 if __name__ == "__main__":
-    tags = input_to_tags("barcelona", ["ami", "selfies", "dads", "ginger"])
+#He may be old and he may not be a ginger but he is my brother #nofilter #goodvibesonly
+    tags = input_to_tags("", ["he", "may", "be", "old", "and", "he", "may", "not", "be", "a", "ginger"])
     print(tags)
+    word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
+    tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(['profile_davidmiron.json'])
+    print (post_dict)
     #word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
     #tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(['profile_davidmiron.json'])
