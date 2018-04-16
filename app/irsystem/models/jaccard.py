@@ -27,7 +27,7 @@ def top_n_tags(n, top_posts):
     for post in sorted_posts:
         for tag in post['tags']:
             tags.append(tag)
-    return tags[:10]
+    return tags[:n]
 
 def cleanup(keywords):
     keywords = keywords.split()
