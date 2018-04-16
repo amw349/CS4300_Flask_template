@@ -22,6 +22,18 @@ returns: word_to_int_dict           maps words to an index in a word vector
         tag_inv_idx                 an inverted index of tags to posts
         post_dict                   maps indicies to their corresponding post
 """
+
+def fallback_tags(lst_of_wrds, loc=""):
+    tags = []
+    n = length(lst_of_wrds)
+    if n > 2: n = 2
+    for word in lst_of_wrds:
+        tags.append("#"+word)
+    if loc == "":
+        return tags[0:n]
+    else:
+        return tags[0:n-1] + [loc]
+
 #in the future chage the argument to a path and use os.listdir(path)
 def process_list_of_jsons(lst_of_jsons):
     #get the set of all words and a seperate set of all tags
