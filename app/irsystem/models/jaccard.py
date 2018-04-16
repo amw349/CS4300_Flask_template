@@ -6,8 +6,10 @@ def top_jaccard_sim(post_dic, input_vec, td_mat):
     scores = []
 
     for row in td_mat:
+        num = np.sum(np.logical_and(input_vec, row))
+        denom = np.sum(np.logical_or(input_vec, row))
         try:
-            jaccard_sims.append(float(len(np.intersect1d(input_vec, row))) / float(len(np.union1d(input_vec, row))))
+            jaccard_sims.append(float(num) / float(denom))
         except:
             jaccard_sims.append(0)
 
@@ -22,7 +24,7 @@ def top_jaccard_sim(post_dic, input_vec, td_mat):
 
 def top_n_tags(n, top_posts):
     tags = []
-    sorted_posts = sorted(top_posts, key = lambda x : x['numberLikes'], reverse=True)
+    sorted_posts = reversed(sorted(top_posts, key = lambda x : x['numberLikes']))
     for post in sorted_posts:
         for tag in post['tags']:
             tags.append(tag)
@@ -62,9 +64,9 @@ def input_to_tags(location, keywords):
     tags = top_n_tags(num_tags, top_jaccard_posts)
     fallback_tag_lst = fallback_tags(keywords, loc="")
 
-    for i in range (num_tags):
-        if scores[i] < 1:
-             tags[i] = fallback_tag_lst[i]
+    #for i in range (num_tags):
+    #    if scores[i] < 1:
+    #         tags[i] = fallback_tag_lst[i]
 
 
     return tags
