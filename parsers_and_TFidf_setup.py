@@ -14,13 +14,25 @@ returns: word_to_int_dict           maps words to an index in a word vector
         tag_to_int_dict             maps words to an index in a tag vector
         int_to_word_dict            maps indicies to words in a word vector
         int_to_tag_dict             maps indicies to words in a word vector
-        word_TDF                    a matrix where the columns are individual posts and the rows are binary 
+        word_TDF                    a matrix where the columns are individual posts and the rows are binary
                                         values of whether or not the word is in that post
-        tag_TDF                     same thing as word_TDF but for tags      
+        tag_TDF                     same thing as word_TDF but for tags
         word_inv_idx                an inverted index of words to posts
         tag_inv_idx                 an inverted index of tags to posts
         post_dict                   maps indicies to their corresponding post
 """
+
+def fallback_tags(lst_of_wrds, loc=""):
+    tags = []
+    n = length(lst_of_wrds)
+    if n > 2: n = 2
+    for word in lst_of_wrds:
+        tags.append("#"+word)
+    if loc == "":
+        return tags[0:n]
+    else:
+        return tags[0:n-1] + [loc]
+
 #in the future chage the argument to a path and use os.listdir(path)
 def process_list_of_jsons(lst_of_jsons):
     #get the set of all words and a seperate set of all tags
@@ -48,16 +60,16 @@ def process_list_of_jsons(lst_of_jsons):
             except:
                 pass
     num_posts = post_count
-    
+
     #create dictionaries for the vector index of each word
-    sorted_words = sorted(word_set) 
+    sorted_words = sorted(word_set)
     sorted_tags = sorted(tag_set)
 
-    word_to_int_dict = {} 
+    word_to_int_dict = {}
     int_to_word_dict = {}
     tag_to_int_dict = {}
     int_to_tag_dict = {}
-    
+
     for i in range (len(sorted_words)):
         if sorted_words[i] != " " and sorted_words[i] != "":
             word_to_int_dict[sorted_words[i]]=i
@@ -66,16 +78,16 @@ def process_list_of_jsons(lst_of_jsons):
         if sorted_words[i] != " " and sorted_words[i] != "":
             tag_to_int_dict[sorted_tags[i]]=i
             int_to_tag_dict[i]=sorted_tags[i]
-    #now go back and create the TFidf as well as the inverted index 
+    #now go back and create the TFidf as well as the inverted index
     #print (num_posts)
     num_words = len(word_to_int_dict)
     num_tags = len(tag_to_int_dict)
     word_TDF = np.zeros((num_posts,num_words))
     tag_TDF = np.zeros((num_posts,num_tags))
-    
+
     word_inv_idx = [list([]) for _ in xrange(num_words)] #use this if in for python3 [[] for _ in range(num_words)]
     tag_inv_idx = [list([]) for _ in xrange(num_tags)] #use this if in for python3 [[] for _ in range(num_tags)]
-    
+
     post_counter = 0
     for json_name in lst_of_jsons:
         data = json.load(open(json_name))
@@ -125,7 +137,7 @@ def strip_links(text):
     link_regex    = re.compile('((https?):((//)|(\\\\))+([\w\d:#@%/;$()~_?\+-=\\\.&](#!)?)*)', re.DOTALL)
     links         = re.findall(link_regex, text)
     for link in links:
-        text = text.replace(link[0], ', ')    
+        text = text.replace(link[0], ', ')
     return text
 
 def removeNonAlpha(text):
@@ -146,7 +158,7 @@ def removeNonAlpha(text):
     #removes the hashtag
 def prepareTag(tag):
     return tag[1:].lower()
-    
+
 # def strip_all_entities(text):
 #     entity_prefixes = ['@','#']
 #     for separator in  string.punctuation:
@@ -163,7 +175,7 @@ def prepareTag(tag):
 if __name__ == "__main__":
     word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
     tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(['profile_davidmiron.json'])
-    
+
     """some test code. You will want to use int_to_word_dict to get printouts that make sense instead of 0s and 1s"""
     #print (word_to_int_dict)
     #print (post_dict)
@@ -173,7 +185,7 @@ if __name__ == "__main__":
     for i in range(len(word_TDF[1])):
         if word_TDF[1][i] != 0:
             print (int_to_word_dict[i])
-    
+
     x=21
     print (tag_TDF)
     print (tag_TDF[x])
@@ -181,4 +193,4 @@ if __name__ == "__main__":
     print (post_dict[x])
     for i in range(len(tag_TDF[x])):
         if tag_TDF[x][i] != 0:
-            print (int_to_tag_dict[i]) 
+            print (int_to_tag_dict[i])
