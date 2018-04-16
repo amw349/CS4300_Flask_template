@@ -11,12 +11,13 @@ def search():
 	query = request.args # TODO: change to appropriate input names and concatanate query for inputs filled
 	form = InputForm(request.form)
 	if request.method == 'POST' and form.validate():
-		location = form.location.data
-		date = form.date.data
-		time = form.time.data
-		people = form.people.data
+		# location = form.location.data
+		# date = form.date.data
+		# time = form.time.data
+		# people = form.people.data
 		content = form.content.data
-		output = input_to_tags(location, [date.strftime('%m-%d-%y'), time, people, content])
+		output = input_to_tags("", content)
+		# print ("output:", output)
 		return render_template('search.html', name=project_name, netids=netids, form=form, output=output)
 	return render_template('search.html', name=project_name, netids=netids, form=form)
 

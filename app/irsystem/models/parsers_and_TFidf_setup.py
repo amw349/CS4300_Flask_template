@@ -3,7 +3,7 @@ import json
 import numpy as np
 import re
 import os
-from os.path import join, dirname, realpath
+
 
 """takes in a list of strings representing
 json objects (which must be in the current directory)
@@ -38,7 +38,6 @@ def fallback_tags(lst_of_wrds, loc=""):
 def process_list_of_jsons(lst_of_jsons):
     #get the set of all words and a seperate set of all tags
     #also put every post a in post dict and assign it a number
-    # basedir = '/Users/alexandraward/Desktop/CS4300_Flask_template/app/static/'
     basedir = os.getcwd()+'/app/static/'
     post_dict = {}
     word_set = set()
@@ -50,19 +49,24 @@ def process_list_of_jsons(lst_of_jsons):
             data = json.load(f)
         posts = data['posts']
         for post in posts:
-            post_count += 1 #posts with no tags or captions still included
+            #posts with no tags or captions still included
             try:
-                post_dict[post_count] = post
                 description = post['description']
                 tags = post['tags']
-
+                #print("dsdkfjaklsjfks")
                 tokenized_description = prepareDescription(description)
                 if len(tags) != 0:#don't count posts with no tags at least for now
+                    #print("dsdkfjaklsjfks")
                     for d_token in tokenized_description:
                         word_set.add(d_token)
                     for t_token in tags:
                         tag_set.add(prepareTag(t_token))
+                    #print("dsdkfjaklsjfks")
+                    post_dict[post_count] = post
+                    post_count += 1
+                    #print ("---succeeded")
             except:
+                #print ("----failed")
                 pass
     num_posts = post_count
 
@@ -101,7 +105,6 @@ def process_list_of_jsons(lst_of_jsons):
         posts = data['posts']
         for post in posts:
             try:
-                post_counter += 1
                 description = post['description']
                 tags = post['tags']
                 tokenized_description = prepareDescription(description)
@@ -117,6 +120,7 @@ def process_list_of_jsons(lst_of_jsons):
                             tag_TDF[post_counter,tag_to_int_dict[t_token]] = 1
                             #Adds the current post index to the list of posts matched to that word
                             tag_inv_idx[tag_to_int_dict[t_token]].append(post_counter)
+                    post_counter += 1
             except:
                 pass
     return word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \
@@ -124,20 +128,25 @@ def process_list_of_jsons(lst_of_jsons):
 
 "takes the text and returns a list of strings"
 def prepareDescription(text):
+    #print ("remove emogies started")
     text = removeEmojies(text)
+    #print ("strip links started")
     text = strip_links(text)
+    #print ("removeNonAlpha")
     text = removeNonAlpha(text)
     return text
 
 def removeEmojies(text):
     emoji_pattern = re.compile("["
-    u"\U0001F600-\U0001F64F"  # emoticons
-    u"\U0001F300-\U0001F5FF"  # symbols & pictographs
-    u"\U0001F680-\U0001F6FF"  # transport & map symbols
-    u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
+    "\U0001F600-\U0001F64F"  # emoticons
+    "\U0001F300-\U0001F5FF"  # symbols & pictographs
+    "\U0001F680-\U0001F6FF"  # transport & map symbols
+    "\U0001F1E0-\U0001F1FF"  # flags (iOS)
                        "]+", flags=re.UNICODE)
+    #emoji_pattern= re.compile('[\U00010000-\U0010ffff]', flags=re.UNICODE)
 
-    clean = (emoji_pattern.sub(r'', text)) # no emoji
+    #print (text)
+    clean =emoji_pattern.sub(r'', text) # no emoji
     return clean
 
 def strip_links(text):
@@ -158,7 +167,7 @@ def removeNonAlpha(text):
             lst.append(i.lower())
         else:
             lst.append(" ")
-    s = "".join(lst)
+    s = str("".join(lst))
     x = 7
     return s.split(' ')
 
@@ -184,20 +193,20 @@ def prepareTag(tag):
 #     tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(['profile_davidmiron.json'])
 #
 #     """some test code. You will want to use int_to_word_dict to get printouts that make sense instead of 0s and 1s"""
-#     #print (word_to_int_dict)
-#     #print (post_dict)
-#     print (word_TDF[1])
-#     #print (word_TDF[2])
-#     print (post_dict[1])
-#     for i in range(len(word_TDF[1])):
-#         if word_TDF[1][i] != 0:
-#             print (int_to_word_dict[i])
-#
-#     x=21
-#     print (tag_TDF)
-#     print (tag_TDF[x])
-#     #print (word_TDF[2])
-#     print (post_dict[x])
-#     for i in range(len(tag_TDF[x])):
-#         if tag_TDF[x][i] != 0:
-#             print (int_to_tag_dict[i])
+    #print (word_to_int_dict)
+    #print (post_dict)
+    #print (word_TDF[1])
+    #print (word_TDF[2])
+    # print (post_dict[1])
+    # for i in range(len(word_TDF[1])):
+    #     if word_TDF[1][i] != 0:
+    #         print (int_to_word_dict[i])
+    #
+    # x=21
+    # print (tag_TDF)
+    # print (tag_TDF[x])
+    # #print (word_TDF[2])
+    # print (post_dict[x])
+    # for i in range(len(tag_TDF[x])):
+    #     if tag_TDF[x][i] != 0:
+    #         print (int_to_tag_dict[i])

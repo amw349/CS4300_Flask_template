@@ -5,16 +5,16 @@
 </head>
 <body>
 <div class="container">
+  <h1>#yourPictures</h1>
   <div class="row">
     <div class=col-md-6>
-      <h1>#yourPictures</h1>
       {% from "includes/_formHelpers.html" import render_field %}
       <form class="form-container" method="POST" action="">
         <h2>Describe your picture</h2>
         <div class="form-group">
           {{render_field(form.content, class_="form-control")}}
         </div>
-        <div class="form-group">
+        <!-- <div class="form-group">
           {{render_field(form.location, class_="form-control")}}
         </div>
         <div class="form-group">
@@ -25,7 +25,7 @@
         </div>
         <div class="form-group">
           {{render_field(form.time, class_="form-control")}}
-        </div>
+        </div> -->
         <button type="submit" class="btn btn-info"> generate # </button>
       </form>
     </div>
