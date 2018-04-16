@@ -1,6 +1,6 @@
-from Parsers_TFIDF_Setup import *
+from Parsers_TFidf_setup import *
 
-def top_jaccard_sim(input_vec, td_mat):
+def top_jaccard_sim(post_dic, input_vec, td_mat):
     top_posts = []
     jaccard_sims = []
     for row in td_mat:
@@ -36,7 +36,7 @@ def cleanup(keywords):
         processed.append(s)
     return processed
 
-def input_vec(location, keywords):
+def input_vec(word_to_int_dict, location, keywords):
     vec = np.zeros(len(word_to_int_dict))
     locs = re.findall('[a-z]+', location.lower())
     words = cleanup(keywords)
@@ -48,5 +48,11 @@ def input_vec(location, keywords):
     return vec
 
 def input_to_tags(location, keywords):
-    in_vec = input_vec(location, keywords)
-    return top_n_tags(10, top_jaccard_sim(in_vec, word_TDF))
+    word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
+    tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(['profile_davidmiron.json'])
+    in_vec = input_vec(word_to_int_dict, location, keywords)
+    return top_n_tags(10, top_jaccard_sim(post_dict, in_vec, word_TDF))
+
+if __name__ == "__main__":
+    word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
+    tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(['profile_davidmiron.json'])
