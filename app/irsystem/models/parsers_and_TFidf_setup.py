@@ -25,7 +25,7 @@ returns: word_to_int_dict           maps words to an index in a word vector
 
 def fallback_tags(lst_of_wrds, loc=""):
     tags = []
-    n = length(lst_of_wrds)
+    n = len(lst_of_wrds)
     if n > 2: n = 2
     for word in lst_of_wrds:
         tags.append("#"+word)
@@ -38,7 +38,7 @@ def fallback_tags(lst_of_wrds, loc=""):
 def process_list_of_jsons(lst_of_jsons):
     #get the set of all words and a seperate set of all tags
     #also put every post a in post dict and assign it a number
-    basedir = os.getcwd()+'/app/static/'
+    basedir = os.getcwd()+'/../../static/'
     post_dict = {}
     word_set = set()
     tag_set = set()
