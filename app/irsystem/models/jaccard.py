@@ -53,7 +53,7 @@ def input_vec(word_to_int_dict, location, keywords):
     return vec
 
 def input_to_tags(location, keywords):
-    num_tags = 3
+    num_tags = 10
     #profile_lst = []
     # for subdir, dirs, files in os.walk('./'):
     #     for file in files:
