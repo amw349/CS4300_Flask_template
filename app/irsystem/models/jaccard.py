@@ -60,7 +60,7 @@ def input_to_tags(location, keywords):
     #         if file[(len(file)-5):(len(file))]=='.json':
     #             profile_lst.append(file)
     #print(profile_lst)
-    profile_lst = ['profile_davidmiron.json']
+    profile_lst = ['profile_davidmiron.json', 'profile_cornellpresident.json', 'profile_alexisren.json', 'profile_nacimgoura.json']
     word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
     tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(profile_lst)
 
