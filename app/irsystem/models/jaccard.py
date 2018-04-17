@@ -67,8 +67,6 @@ def input_to_tags(location, keywords):
     #for i in range (num_tags):
     #    if scores[i] < 1:
     #         tags[i] = fallback_tag_lst[i]
-
-
     return tags
 
 if __name__ == "__main__":

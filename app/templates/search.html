@@ -30,14 +30,12 @@
       </form>
     </div>
     <div class=col-md-6>
-      <form class="form-inline global-search">
+      <form class="form-inlineh">
         {% if output %}
         <h2>Top #'s to use</h2>
-        <p>
           {% for tag in output %}
-            <span>{{tag}}</span>
+            <p>{{tag}}</p>
           {% endfor %}
-        <p>
         {% endif %}
       </form>
     </div>
