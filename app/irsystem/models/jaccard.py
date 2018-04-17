@@ -24,8 +24,8 @@ def top_jaccard_sim(post_dic, input_vec, td_mat):
 
 def top_n_tags(n, top_posts):
     tags = []
-    sorted_posts = reversed(sorted(top_posts, key = lambda x : x['numberLikes']))
-    for post in sorted_posts:
+    #sorted_posts = reversed(sorted(top_posts, key = lambda x : x['numberLikes']))
+    for post in top_posts:
         for tag in post['tags']:
             tags.append(tag)
     return tags[:n]
