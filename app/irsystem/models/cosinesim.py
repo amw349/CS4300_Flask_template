@@ -19,7 +19,7 @@ def top_cosine_sim(post_dic, input_vec, td_mat):
     for i in range(0, 5):
         if(sorted_indicies[i] in post_dic):
             top_posts.append(post_dic[sorted_indicies[i]])
-            scores.append(jaccard_sims[sorted_indicies[i]])
+            scores.append(cosine_sims[sorted_indicies[i]])
 
     return top_posts,scores
 
@@ -68,8 +68,8 @@ def input_to_tags(location, keywords):
 
     in_vec = input_vec(word_to_int_dict, location, keywords)
 
-    top_jaccard_posts,scores = top_jaccard_sim(post_dict, in_vec, word_TDF)
-    tags = top_n_tags(num_tags, top_jaccard_posts)
+    top_cosine_posts,scores = top_cosine_sim(post_dict, in_vec, word_TDF)
+    tags = top_n_tags(num_tags, top_cosine_posts)
     fallback_tag_lst = fallback_tags(keywords, loc="")
 
     #for i in range (num_tags):
