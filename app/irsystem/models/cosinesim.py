@@ -61,11 +61,8 @@ def input_to_tags(location, keywords):
     #         if file[(len(file)-5):(len(file))]=='.json':
     #             profile_lst.append(file)
     #print(profile_lst)
-<<<<<<< HEAD:app/irsystem/models/cosinesim.py
-    profile_lst = ['profile_davidmiron.json', 'profile_cornellpresident.json', 'profile_alexisren.json', 'profile_nacimgoura.json']
-=======
+
     profile_lst = ['profile_davidmiron.json', 'profile_cornellpresident.json', 'profile_alexisren.json', 'profile_nacimgoura.json', 'asos.json', 'supremenewyork.json', 'adidas.json', 'adidasoriginals.json', 'nikelab.json', 'nike.json', 'lululemon.json', 'vans.json', 'converse.json', 'underarmour.json', 'google.json', 'amazon.json', 'apple.json', 'samsungus.json']
->>>>>>> 712a967d60158053a7bd74bb431374f20c7a6dc7:app/irsystem/models/jaccard.py
     word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
     tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(profile_lst)
 
