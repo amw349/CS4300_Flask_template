@@ -1,19 +1,20 @@
 from parsers_and_TFidf_setup import *
+from numpy import linalg as LA
 
-def top_jaccard_sim(post_dic, input_vec, td_mat):
+def top_cosine_sim(post_dic, input_vec, td_mat):
     top_posts = []
-    jaccard_sims = []
+    cosine_sims = []
     scores = []
 
     for row in td_mat:
-        num = np.sum(np.logical_and(input_vec, row))
-        denom = np.sum(np.logical_or(input_vec, row))
+        num = np.dot(input_vec, row)
+        denom = (LA.norm(input_vec))*(LA.norm(row))
         try:
-            jaccard_sims.append(float(num) / float(denom))
+            cosine_sims.append(float(num) / float(denom))
         except:
-            jaccard_sims.append(0)
+            cosine_sims.append(0)
 
-    sorted_indicies = np.argsort(jaccard_sims)[::-1]
+    sorted_indicies = np.argsort(cosine_sims)[::-1]
 
     for i in range(0, 5):
         if(sorted_indicies[i] in post_dic):
@@ -60,7 +61,7 @@ def input_to_tags(location, keywords):
     #         if file[(len(file)-5):(len(file))]=='.json':
     #             profile_lst.append(file)
     #print(profile_lst)
-    profile_lst = ['profile_davidmiron.json']
+    profile_lst = ['profile_davidmiron.json', 'profile_cornellpresident.json', 'profile_alexisren.json', 'profile_nacimgoura.json']
     word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
     tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(profile_lst)
 
@@ -76,7 +77,7 @@ def input_to_tags(location, keywords):
     return tags
 
 if __name__ == "__main__":
-    tags = input_to_tags("", "he may be old and he may not be a ginger")
+    tags = input_to_tags("", "cornell technology create science research")
     print(tags)
     # word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
     # tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(['profile_davidmiron.json'])
