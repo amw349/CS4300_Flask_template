@@ -2,7 +2,7 @@ from parsers_and_TFidf_setup import *
 from numpy import linalg as LA
 from scipy.sparse.linalg import svds
 
-profile_lst = ['profile_davidmiron.json', 'profile_cornellpresident.json', 'profile_alexisren.json', 'profile_nacimgoura.json', 'asos.json', 'supremenewyork.json', 'adidas.json', 'adidasoriginals.json', 'nikelab.json', 'nike.json', 'lululemon.json', 'vans.json', 'converse.json', 'underarmour.json', 'google.json', 'amazon.json', 'apple.json', 'samsungus.json']
+profile_lst = ['amandabisk.json', 'andyspeer.json', 'atighteru.json', 'bodybysimone.json', 'gypsetgoddess.json', 'harleypasternak.json', 'izabelgoulart.json', 'jamesduigan.json', 'jaycardiello.json', 'laceystonefitness.json', 'lindseyvonn.json', 'mistyonpointe.json', 'nacimgoura.json', 'profile_alexisren.json', 'profile_cornellpresident.json', 'profile_davidmiron.json', 'rix.official.json', 'wellness_ed.json', 'zannavandijk.json']
 word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
 tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(profile_lst)
 
