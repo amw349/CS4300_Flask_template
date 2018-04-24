@@ -1,5 +1,10 @@
 from parsers_and_TFidf_setup import *
 from numpy import linalg as LA
+from scipy.sparse.linalg import svds
+
+profile_lst = ['profile_davidmiron.json', 'profile_cornellpresident.json', 'profile_alexisren.json', 'profile_nacimgoura.json', 'asos.json', 'supremenewyork.json', 'adidas.json', 'adidasoriginals.json', 'nikelab.json', 'nike.json', 'lululemon.json', 'vans.json', 'converse.json', 'underarmour.json', 'google.json', 'amazon.json', 'apple.json', 'samsungus.json']
+word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
+tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(profile_lst)
 
 def top_cosine_sim(post_dic, input_vec, td_mat):
     top_posts = []
@@ -62,10 +67,6 @@ def input_to_tags(location, keywords):
     #             profile_lst.append(file)
     #print(profile_lst)
 
-    profile_lst = ['profile_davidmiron.json', 'profile_cornellpresident.json', 'profile_alexisren.json', 'profile_nacimgoura.json', 'asos.json', 'supremenewyork.json', 'adidas.json', 'adidasoriginals.json', 'nikelab.json', 'nike.json', 'lululemon.json', 'vans.json', 'converse.json', 'underarmour.json', 'google.json', 'amazon.json', 'apple.json', 'samsungus.json']
-    word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
-    tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(profile_lst)
-
     in_vec = input_vec(word_to_int_dict, location, keywords)
 
     top_cosine_posts,scores = top_cosine_sim(post_dict, in_vec, word_TDF)
@@ -76,6 +77,10 @@ def input_to_tags(location, keywords):
     #    if scores[i] < 1:
     #         tags[i] = fallback_tag_lst[i]
     return tags
+
+def svd_decomp(td_mat):
+    u, s, v_trans = svds(td_mat, k=100)
+    return u, s, v_trans
 
 if __name__ == "__main__":
     tags = input_to_tags("", "cornell technology create science research")
