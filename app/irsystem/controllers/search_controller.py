@@ -1,7 +1,7 @@
 from . import *
 from app.irsystem.models.helpers import *
 from app.irsystem.models.helpers import NumpyEncoder as NumpyEncoder
-from app.irsystem.models.jaccard import input_to_tags
+from app.irsystem.models.cosinesim import input_to_tags
 
 project_name = "How to Get More Likes"
 netids = ["Jake Bareket (jhb334)", "Anya Chopra (ac948)", "Michael Herbstman (mh856)", "David Miron (dm585)", "Alexandra Ward (amw349)"]
