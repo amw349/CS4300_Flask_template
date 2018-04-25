@@ -92,11 +92,11 @@ def svd_decomp(td_mat):
     return u, s, v_trans
 
 if __name__ == "__main__":
-    tags = input_to_tags("", "cornell technology create science research")
-    print(tags)
+    # tags = input_to_tags("", "cornell technology create science research")
+    # print(tags)
     # word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
     # tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(['profile_davidmiron.json'])
     # print (post_dict)
     # word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
     # tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(['profile_davidmiron.json'])
-    # json_list()
+    serve_jsons()

@@ -6,19 +6,20 @@
 </head>
 <body>
 <div class="container">
-    <h1 class="text-center">#yourPhoto</h1>
+    <!-- <h1 class="text-center">#yourPhoto</h1> -->
+    <img src="../static/images/logo.png" alt="#yourPhoto Logo" class="center-block">
     <div class="row">
         <div class="col-md-8 col-md-offset-2 text-center">
             {% from "includes/_formHelpers.html" import render_field %}
             <form class="form-container" method="POST" action="">
-                <h2>Describe your picture</h2>
-                <div class="form-group">
-                    {{render_field(form.content, class_="form-control")}}
+                <div class="row">
+                  <div class="col-sm-9 form-group">
+                    <input type="text" name="input_query" autofocus placeholder="Describe what's happening in your photo" autocomplete="off" />
+                  </div>
+                  <div class="col-sm-3">
+                    <button type="submit" class="btn btn-info"> generate #</button>
+                  </div>
                 </div>
-                <!-- testing..... -->
-                <!-- <input type="text" class="tvshow" placeholder="Describe what's happening in your photo" title="Name of a TV show" /> -->
-                <!-- end of test...... -->
-                <button type="submit" class="btn btn-info"> generate #</button>
             </form>
         </div>
       </div>

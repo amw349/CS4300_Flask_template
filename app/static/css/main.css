@@ -30,10 +30,10 @@ footer{
   padding: 1%;
 }
 
-/* input{
+
+input{
   font-weight: 200;
-  font-family: "Avenir Next",Avenir,"Segoe UI",Roboto,"Helvetica Neue",Helvetica,sans-serif;
-  color: #febd17;
+  color: #5BC0DE;
   font-size: 2em;
   outline: 0;
   box-shadow: none;
@@ -42,9 +42,9 @@ footer{
   border: none;
   background: 0 0;
   display: block-inline;
-  height: 2em;
-  width: 530px;
-  float: left;
+  /* height: 2em; */
+  width: 100%;
+  float: right;
   padding: 0 2%;
   position: relative;
   z-index: 0;
@@ -52,4 +52,4 @@ footer{
   -o-transition: color .2s ease-in-out,opacity .2s ease-in-out;
   -webkit-transition: color .2s ease-in-out,opacity .2s ease-in-out;
   transition: color .2s ease-in-out,opacity .2s ease-in-out;
-} */
+}
