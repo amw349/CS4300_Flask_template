@@ -9,7 +9,7 @@ import os
 json objects (which must be in the current directory)
 and treats each post like a document. Returns a
 dictionary of words to word indicies in the vector representation
-of our data. Also return a term document matric of the entrue data set
+of our data. Also return a term document matrix of the entry data set
 
 returns: word_to_int_dict           maps words to an index in a word vector
         tag_to_int_dict             maps words to an index in a tag vector

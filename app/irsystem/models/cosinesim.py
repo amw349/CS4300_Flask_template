@@ -3,17 +3,17 @@ from numpy import linalg as LA
 from scipy.sparse.linalg import svds
 import os
 
-def serve_jsons():
-    path_to_json_dir = os.path.dirname(os.path.abspath(__file__))+'/../../static/json'
-    for _, _, filenames in os.walk(path_to_json_dir):
-        json_files = [ f for f in filenames if f.endswith("json") ]
-        return json_files
+# def serve_jsons():
+#     path_to_json_dir = os.path.dirname(os.path.abspath(__file__))+'/../../static/json'
+#     for _, _, filenames in os.walk(path_to_json_dir):
+#         json_files = [ f for f in filenames if f.endswith("json") ]
+#         return json_files
+#
+# profile_lst = serve_jsons()
+# word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
+# tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(profile_lst)
 
-profile_lst = serve_jsons()
-word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
-tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(profile_lst)
-
-def top_cosine_sim(post_dic, input_vec, td_mat):
+def top_cosine_sim(post_dict, input_vec, td_mat):
     top_posts = []
     cosine_sims = []
     scores = []
@@ -29,8 +29,8 @@ def top_cosine_sim(post_dic, input_vec, td_mat):
     sorted_indicies = np.argsort(cosine_sims)[::-1]
 
     for i in range(0, 5):
-        if(sorted_indicies[i] in post_dic):
-            top_posts.append(post_dic[sorted_indicies[i]])
+        if(sorted_indicies[i] in post_dict):
+            top_posts.append(post_dict[sorted_indicies[i]])
             scores.append(cosine_sims[sorted_indicies[i]])
 
     return top_posts,scores
@@ -65,7 +65,7 @@ def input_vec(word_to_int_dict, location, keywords):
             vec[word_to_int_dict[w]] = 1
     return vec
 
-def input_to_tags(location, keywords):
+def input_to_tags(location, keywords, word_to_int_dict, post_dict, word_TDF):
     num_tags = 10
     #profile_lst = []
     # for subdir, dirs, files in os.walk('./'):
