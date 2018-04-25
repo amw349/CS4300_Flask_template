@@ -17,7 +17,6 @@ def search():
 		# people = form.people.data
 		content = form.content.data
 		output = input_to_tags("", content)
-		# print ("output:", output)
 		return render_template('search.html', name=project_name, netids=netids, form=form, output=output)
 	return render_template('search.html', name=project_name, netids=netids, form=form)
 

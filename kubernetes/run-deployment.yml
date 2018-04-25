@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: flask
-        image: hashtagyourphoto/flaskapp:v2
+        image: hashtagyourphoto/flaskapp:v2.8
         env:
         - name: APP_SETTINGS
           value: config.ProductionConfig
