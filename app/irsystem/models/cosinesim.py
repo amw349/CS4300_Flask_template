@@ -23,7 +23,7 @@ def top_n_tags(top_posts, n=10):
             tags.append(tag)
     return tags[:n]
 
-def input_to_tags(input_text, k=10):
+def input_to_tags(input_text, word_to_int_dict, post_dict, k=10):
     cosine_sims=[]
     top_posts=[]
     count=0

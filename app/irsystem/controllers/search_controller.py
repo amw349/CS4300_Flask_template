@@ -29,7 +29,7 @@ def search():
 		# time = form.time.data
 		# people = form.people.data
 		content = form["input_query"]
-		output = input_to_tags(content)
+		output = input_to_tags(content, word_to_int_dict, post_dict)
 		# print ("output:", output)
 		return render_template('search.html', name=project_name, netids=netids, form=form, output=output)
 	return render_template('search.html', name=project_name, netids=netids, form=form)
