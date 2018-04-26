@@ -23,7 +23,6 @@ def top_n_tags(top_posts, n=10):
             tags.append(tag)
     return tags[:n]
 
-
 def closest_tags(input_text, k=10):
     cosine_sims=[]
     top_posts=[]
