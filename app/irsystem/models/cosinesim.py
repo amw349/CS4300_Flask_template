@@ -1,50 +1,10 @@
 from parsers_and_TFidf_setup import *
 from numpy import linalg as LA
 from scipy.sparse.linalg import svds
-import os
+from sklearn.preprocessing import normalize
 
-# def serve_jsons():
-#     path_to_json_dir = os.path.dirname(os.path.abspath(__file__))+'/../../static/json'
-#     for _, _, filenames in os.walk(path_to_json_dir):
-#         json_files = [ f for f in filenames if f.endswith("json") ]
-#         return json_files
-#
-# profile_lst = serve_jsons()
-# word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
-# tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(profile_lst)
-
-def top_cosine_sim(post_dict, input_vec, td_mat):
-    top_posts = []
-    cosine_sims = []
-    scores = []
-
-    for row in td_mat:
-        num = np.dot(input_vec, row)
-        denom = (LA.norm(input_vec))*(LA.norm(row))
-        try:
-            cosine_sims.append(float(num) / float(denom))
-        except:
-            cosine_sims.append(0)
-
-    sorted_indicies = np.argsort(cosine_sims)[::-1]
-
-    for i in range(0, 5):
-        if(sorted_indicies[i] in post_dict):
-            top_posts.append(post_dict[sorted_indicies[i]])
-            scores.append(cosine_sims[sorted_indicies[i]])
-
-    return top_posts,scores
-
-def top_n_tags(n, top_posts):
-    tags = []
-    #sorted_posts = reversed(sorted(top_posts, key = lambda x : x['numberLikes']))
-    for post in top_posts:
-        for tag in post['tags']:
-            tags.append(tag)
-    return tags[:n]
-
-def cleanup(keywords):
-    keywords = keywords.split()
+def cleanup(input_text):
+    keywords = input_text.split()
     processed = []
     lst = []
     for word in keywords:
@@ -56,45 +16,39 @@ def cleanup(keywords):
         processed.append(s)
     return processed
 
-def input_vec(word_to_int_dict, location, keywords):
-    vec = np.zeros(len(word_to_int_dict))
-    locs = re.findall('[a-z]+', location.lower())
-    words = cleanup(keywords)
-    for w in words:
-        if w in word_to_int_dict:
-            vec[word_to_int_dict[w]] = 1
-    return vec
+def top_n_tags(top_posts, n=10):
+    tags = []
+    for post in top_posts:
+        for tag in post['tags']:
+            tags.append(tag)
+    return tags[:n]
 
-def input_to_tags(location, keywords, word_to_int_dict, post_dict, word_TDF):
-    num_tags = 10
-    #profile_lst = []
-    # for subdir, dirs, files in os.walk('./'):
-    #     for file in files:
-    #         if file[(len(file)-5):(len(file))]=='.json':
-    #             profile_lst.append(file)
-    #print(profile_lst)
+def closest_tags(input_text, k=10):
+    cosine_sims=[]
+    top_posts=[]
+    count=0
+    keywords = cleanup(input_text)
+    words_compressed, x, docs_compressed = svds(td_mat, k=k)
+    words_compressed = normalize(words_compressed, axis = 1)
+    avg_input_vec = np.zeros(10)
 
-    in_vec = input_vec(word_to_int_dict, location, keywords)
+    for word in keywords:
+        if word in word_to_int_dict:
+            count = count + 1
+            avg_input_vec = avg_input_vec + words_compressed[word_to_int_dict[word]]
+    avg_input_vec = avg_input_vec / count
 
-    top_cosine_posts,scores = top_cosine_sim(post_dict, in_vec, word_TDF)
-    tags = top_n_tags(num_tags, top_cosine_posts)
-    fallback_tag_lst = fallback_tags(keywords, loc="")
+    for row in words_compressed:
+        cosine_sims.append(np.dot(avg_input_vec, row))
 
-    #for i in range (num_tags):
-    #    if scores[i] < 1:
-    #         tags[i] = fallback_tag_lst[i]
-    return tags
+    cosine_sims = np.argsort(cosine_sims)
+    top_posts = [post_dict[i] for i in cosine_sims]
+    print(top_posts[0])
 
-def svd_decomp(td_mat):
-    u, s, v_trans = svds(td_mat, k=100)
-    return u, s, v_trans
+    return top_n_tags(top_posts)
 
 if __name__ == "__main__":
-    tags = input_to_tags("", "cornell technology create science research")
-    print(tags)
-    # word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
-    # tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(['profile_davidmiron.json'])
-    # print (post_dict)
-    # word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
-    # tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(['profile_davidmiron.json'])
-    # serve_jsons()
+    profile_lst = ['profile_davidmiron.json', 'profile_cornellpresident.json', 'profile_alexisren.json', 'profile_nacimgoura.json', 'asos.json', 'supremenewyork.json', 'adidas.json', 'adidasoriginals.json', 'nikelab.json', 'nike.json', 'lululemon.json', 'vans.json', 'converse.json', 'underarmour.json', 'google.json', 'amazon.json', 'apple.json', 'samsungus.json']
+    word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
+    tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(profile_lst)
+    print(closest_tags("cornell technology achievement science", word_TDF, word_to_int_dict, post_dict))
