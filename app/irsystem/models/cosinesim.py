@@ -43,7 +43,6 @@ def input_to_tags(input_text, k=10):
 
     cosine_sims = np.argsort(cosine_sims)
     top_posts = [post_dict[i] for i in cosine_sims]
-    print(top_posts[0])
 
     return top_n_tags(top_posts)
 
