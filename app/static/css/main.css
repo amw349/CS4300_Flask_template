@@ -1,11 +1,13 @@
 html, body {
   height: 100%;
-  background-color: #252323;
-  color: #ffffff;
+  background-image: url('../images/instagram_gradient.jpg');
+  background-position: center;
+  background-size: cover;
+  color: white;
 }
 
 .container{
-  margin-top: 5%;
+  padding-top: 10%;
 }
 
 label{
@@ -30,10 +32,13 @@ footer{
   padding: 1%;
 }
 
+::placeholder{
+  color: white;
+}
 
 input{
   font-weight: 200;
-  color: #5BC0DE;
+  color: white;
   font-size: 2em;
   outline: 0;
   box-shadow: none;
