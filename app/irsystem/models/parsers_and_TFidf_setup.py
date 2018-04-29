@@ -38,13 +38,14 @@ def fallback_tags(lst_of_wrds, loc=""):
 def process_list_of_jsons(lst_of_jsons):
     #get the set of all words and a seperate set of all tags
     #also put every post a in post dict and assign it a number
-    basedir = os.getcwd()+'/app/static/json/'
+    basedir = '/Users/michaelherbstman/Desktop/CS_4300/Project/CS4300_Flask_template/app/static/json/'#os.getcwd()+'/app/static/json/'
     post_dict = {}
     word_set = set()
     tag_set = set()
     post_count = 0
     for json_name in lst_of_jsons:
         data = {}
+        # print ("json name:", json_name)
         with open(basedir+json_name) as f:
             data = json.load(f)
         posts = data['posts']
@@ -78,15 +79,19 @@ def process_list_of_jsons(lst_of_jsons):
     int_to_word_dict = {}
     tag_to_int_dict = {}
     int_to_tag_dict = {}
+    i = -1
+    for word in (sorted_words):
 
-    for i in range (len(sorted_words)):
-        if sorted_words[i] != " " and sorted_words[i] != "":
-            word_to_int_dict[sorted_words[i]]=i
-            int_to_word_dict[i]=sorted_words[i]
-    for i in range (len(sorted_tags)):
-        if sorted_words[i] != " " and sorted_words[i] != "":
-            tag_to_int_dict[sorted_tags[i]]=i
-            int_to_tag_dict[i]=sorted_tags[i]
+        if word != " " and word != "":
+            i += 1
+            word_to_int_dict[word]=i
+            int_to_word_dict[i]=word
+    i = -1
+    for tag in (sorted_tags):
+        if tag != " " and tag != "":
+            i+=1
+            tag_to_int_dict[tag]=i
+            int_to_tag_dict[i]=tag
     #now go back and create the TFidf as well as the inverted index
     #print (num_posts)
     num_words = len(word_to_int_dict)
