@@ -1,10 +1,50 @@
 from parsers_and_TFidf_setup import *
 from numpy import linalg as LA
 from scipy.sparse.linalg import svds
-from sklearn.preprocessing import normalize
+import os
 
-def cleanup(input_text):
-    keywords = input_text.split()
+def json_list():
+    path_to_json_dir = os.path.dirname(os.path.abspath(__file__))+'/../../static/json'
+    for _, _, filenames in os.walk(path_to_json_dir):
+        return filenames
+
+# profile_lst = ['amandabisk.json', 'andyspeer.json', 'atighteru.json', 'bodybysimone.json', 'gypsetgoddess.json', 'harleypasternak.json', 'izabelgoulart.json', 'jamesduigan.json', 'jaycardiello.json', 'laceystonefitness.json', 'lindseyvonn.json', 'mistyonpointe.json', 'nacimgoura.json', 'profile_alexisren.json', 'profile_cornellpresident.json', 'profile_davidmiron.json', 'rix.official.json', 'wellness_ed.json', 'zannavandijk.json']
+profile_lst = json_list()
+word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \
+word_TDF, tag_TDF, word_inv_idx, tag_inv_idx, post_dict, word_TF_IDF, doc_norms, idf_dict = process_list_of_jsons(profile_lst)
+
+def top_cosine_sim(post_dic, input_vec, td_mat):
+    top_posts = []
+    cosine_sims = []
+    scores = []
+
+    for row in td_mat:
+        num = np.dot(input_vec, row)
+        denom = (LA.norm(input_vec))*(LA.norm(row))
+        try:
+            cosine_sims.append(float(num) / float(denom))
+        except:
+            cosine_sims.append(0)
+
+    sorted_indicies = np.argsort(cosine_sims)[::-1]
+
+    for i in range(0, 5):
+        if(sorted_indicies[i] in post_dic):
+            top_posts.append(post_dic[sorted_indicies[i]])
+            scores.append(cosine_sims[sorted_indicies[i]])
+
+    return top_posts,scores
+
+def top_n_tags(n, top_posts):
+    tags = []
+    #sorted_posts = reversed(sorted(top_posts, key = lambda x : x['numberLikes']))
+    for post in top_posts:
+        for tag in post['tags']:
+            tags.append(tag)
+    return tags[:n]
+
+def cleanup(keywords):
+    keywords = keywords.split()
     processed = []
     lst = []
     for word in keywords:
@@ -70,4 +110,27 @@ if __name__ == "__main__":
     word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
     tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(['atighteru.json', 'balous_friends.json'])
 
-    print(input_to_tags("", word_TDF, word_to_int_dict, post_dict, int_to_word_dict, k=10))
+    in_vec = input_vec(word_to_int_dict, location, keywords)
+
+    top_cosine_posts,scores = top_cosine_sim(post_dict, in_vec, word_TDF)
+    tags = top_n_tags(num_tags, top_cosine_posts)
+    fallback_tag_lst = fallback_tags(keywords, loc="")
+
+    #for i in range (num_tags):
+    #    if scores[i] < 1:
+    #         tags[i] = fallback_tag_lst[i]
+    return tags
+
+def svd_decomp(td_mat):
+    u, s, v_trans = svds(td_mat, k=100)
+    return u, s, v_trans
+
+if __name__ == "__main__":
+    tags = input_to_tags("", "cornell technology create science research")
+    print(tags)
+    # word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
+    # tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(['profile_davidmiron.json'])
+    # print (post_dict)
+    # word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
+    # tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(['profile_davidmiron.json'])
+    # json_list()
