@@ -1,55 +1,68 @@
 <html>
 <head>
+    <title>{{project_name}}</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="http://d3js.org/d3.v3.min.js" language="JavaScript"></script>
+    <script src="/static/js/liquidFillGauge.js" language="JavaScript"></script>
+    <style>
+        .liquidFillGaugeText { font-family: Helvetica; font-weight: bold; }
+    </style>
     <link rel="stylesheet" href="/static/css/main.css">
 </head>
 <body>
 <div class="container">
-    <!-- <h1 class="text-center">#yourPhoto</h1> -->
-    <img src="../static/images/logo.png" alt="#yourPhoto Logo" class="center-block">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2 text-center">
-            {% from "includes/_formHelpers.html" import render_field %}
-            <form class="form-container" method="POST" action="">
-                <div class="row">
-                  <div class="col-sm-9 form-group">
-                    <input type="text" name="input_query" autofocus placeholder="Describe what's happening in your photo" autocomplete="off" />
-                  </div>
-                  <div class="col-sm-3">
-                    <button type="submit" class="btn btn-info"> generate #</button>
-                  </div>
+    {% if form_submitted_status %}
+    <div>
+    {% else %}
+    <div class="hidden">
+    {% endif %}
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2 text-center">
+                    <p class="title" class="center-block">#yourPhotos</p>
+                    {% from "includes/_formHelpers.html" import render_field %}
+                    <form class="form-container" method="POST" action="">
+                        <div class="row">
+                            <div class="col-sm-12 form-group">
+                                <input type="text" name="input_query" id="input_query" autofocus
+                                       style="text-align: center" placeholder="Describe what's happening in your photo"
+                                       autocomplete="off"/>
+                            </div>
+                        </div>
+                        <input type="submit" style="display:none"/>
+                    </form>
                 </div>
-            </form>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-8 col-md-offset-2 text-center">
+            </div>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2 text-center">
                     <form class="form-inline" action="">
                         {% if output %}
-                        <h2>Top #'s to use</h2>
+                        <p class="section-title">Top #'s to use</p>
                         <div class="hashtags-output-container">
                             {% for tag in output %}
                             {% set button_id = tag[1:] + "-btn" %}
                             <button type="button" onclick="showHashtagInfo('{{tag[1:]}}', '{{button_id}}')"
                                     id={{button_id}} class="btn btn-info tag_buttons">{{tag}}
                             </button>
-                            <div class="selected-hashtag-container" id={{tag[1:]}} style="display: none"></div>
+                            <div class="selected-hashtag-container" id={{tag[1:]}} style="display: none">
+                            </div>
                             {% endfor %}
                         </div>
                         {% endif %}
                     </form>
-        </div>
-    </div>
-    <footer>
+                </div>
+            </div>
+            <footer>
         <span> &copy; INFO 4300: Language and Information '18 |
         {% if netids %}
         {% for id in netids %}
         <span>{{id}}</span>
         {% endfor %}
         {% endif %}
-    </footer>
-</div>
-<script type="text/javascript" src="/static/js/actions.js"></script>
+            </footer>
+        </div>
+    </div>
+    <script type="text/javascript" src="/static/js/search_actions.js"></script>
 </body>
 </html>

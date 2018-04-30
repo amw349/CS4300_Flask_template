@@ -19,17 +19,16 @@ tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(profile_ls
 
 project_name = "#yourPhoto"
 netids = ["Jake Bareket (jhb334)", "Anya Chopra (ac948)", "Michael Herbstman (mh856)", "David Miron (dm585)", "Alexandra Ward (amw349)"]
-
-@irsystem.route('/', methods=['GET', 'POST'])
+@irsystem.route('search', methods=['GET', 'POST'])
 def search():
-	form = request.form
-	if request.method == 'POST':
-		# location = form.location.data
-		# date = form.date.data
-		# time = form.time.data
-		# people = form.people.data
-		content = form["input_query"]
-		output = input_to_tags(content, word_TDF, word_to_int_dict, post_dict)
-		# print ("output:", output)
-		return render_template('search.html', name=project_name, netids=netids, form=form, output=output)
-	return render_template('search.html', name=project_name, netids=netids, form=form)
+    print ("search")
+    form = request.form
+    form_submitted = False
+    if request.method == 'POST':
+        print ("Form submitted...")
+        form_submitted = True
+        input_query = request.form['input_query']
+        print ("Seach input:", input_query)
+        # output = input_to_tags(input_query, word_TDF, word_to_int_dict, post_dict)
+        return render_template('search.html', name=project_name, netids=netids, form=form, form_submitted_status=form_submitted, output=["#1", "#2", "#3", "#4", "#5"])
+    return render_template('search.html', name=project_name, netids=netids, form=form)
