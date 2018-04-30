@@ -2,13 +2,14 @@ from parsers_and_TFidf_setup import *
 from numpy import linalg as LA
 from scipy.sparse.linalg import svds
 from sklearn.preprocessing import normalize
+import csv
 import os
 
 good_tags={}
-    with open('goodwords.csv') as csvfile:
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            good_tags[row['goodword']]='avglikes'
+with open('goodwords.csv') as csvfile:
+    reader = csv.DictReader(csvfile)
+    for row in reader:
+        good_tags[row['goodword']]='avglikes'
 
 def json_list():
     path_to_json_dir = os.path.dirname(os.path.abspath(__file__))+'/../../static/json'
@@ -79,9 +80,9 @@ def input_to_tags(input_text, td_mat, word_to_int_dict, post_dict, int_to_word_d
     count=0
     keywords = cleanup(input_text)
     print("td mat is", td_mat)
-    docs_compressed, x, words_compressed = svds(td_mat.astype(float), k=10)
+    # docs_compressed, x, words_compressed = svds(td_mat.astype(float), k=10)
     print("MIGHT BE WORKING")
-    words_compressed = words_compressed.transpose()
+    words_compressed = np.load('words_compressed.npy')
     words_compressed = normalize(words_compressed, axis = 1)
     avg_input_vec = np.zeros(words_compressed.shape[1])
 
@@ -107,9 +108,14 @@ def input_to_tags(input_text, td_mat, word_to_int_dict, post_dict, int_to_word_d
         sim = np.dot(td_mat[i], vec)
         sim = sim / ((LA.norm(vec)) * (LA.norm(td_mat[i])))
         post_scores.append(sim)
-    post_scores = np.argsort(post_scores)[::-1]
-    top_tags = [post_dict[j]['tags'] for j in post_scores]
-    return top_tags[0]
+    post_arg_scores = np.argsort(post_scores)[::-1]
+    top_tags = [(post_dict[j]['tags'], post_scores[j]) for j in post_arg_scores]
+    final_lst = []
+    for tup in top_tags:
+        for tag in tup[0]:
+            final_lst.append((tag, tup[1]))
+
+    return final_lst[:10]
 
 if __name__ == "__main__":
     word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \

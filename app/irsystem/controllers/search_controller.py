@@ -7,15 +7,36 @@ from numpy import linalg as LA
 from scipy.sparse.linalg import svds
 import os
 
-def serve_jsons():
-    path_to_json_dir = os.getcwd()+'/app/static/json/'
-    for _, _, filenames in os.walk(path_to_json_dir):
-        json_files = [ f for f in filenames if f.endswith("json") ]
-        return json_files
+# def serve_jsons():
+#     path_to_json_dir = os.getcwd()+'/app/static/json/'
+#     for _, _, filenames in os.walk(path_to_json_dir):
+#         json_files = [ f for f in filenames if f.endswith("json") ]
+#         return json_files
 
-profile_lst = serve_jsons()
-word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \
-word_TDF, tag_TDF, word_inv_idx, tag_inv_idx, post_dict, word_TF_IDF, doc_norms, idf_dict = process_list_of_jsons(profile_lst)
+# profile_lst = serve_jsons()
+# word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \
+# word_TDF, tag_TDF, word_inv_idx, tag_inv_idx, post_dict, word_TF_IDF, doc_norms, idf_dict = process_list_of_jsons(profile_lst)
+
+word_to_int = {}
+with open("/../models/word_to_int.csv", 'rb') as f:
+    mycsv = csv.reader(f, delimiter = ",")
+    for x, row in enumerate(mycsv):
+        if x!=0:
+            mydict[row[0]] = int(row[1])
+
+post_dict = {}
+with open("/../models/post_dict.csv", 'rb') as f:
+    mycsv = csv.reader(f, delimiter = ",")
+    for x, row in enumerate(mycsv):
+        if x!=0:
+            mydict[row[0]] = (row[1])
+
+inverted_index = {}
+with open("/../models/inverted_index.csv", 'rb') as f:
+    mycsv = csv.reader(f, delimiter = ",")
+    for x, row in enumerate(mycsv):
+        if x!=0:
+            mydict[row[0]] = np.fromstring(row[1])
 
 project_name = "#yourPhoto"
 netids = ["Jake Bareket (jhb334)", "Anya Chopra (ac948)", "Michael Herbstman (mh856)", "David Miron (dm585)", "Alexandra Ward (amw349)"]
