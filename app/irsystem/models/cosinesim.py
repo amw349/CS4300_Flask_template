@@ -109,6 +109,7 @@ def input_to_tags(input_text, word_to_int_dict, post_dict, int_to_word_dict, k=1
     words_compressed = np.load(os.getcwd()+'/app/irsystem/models/words_compressed.npy')
     words_compressed = normalize(words_compressed, axis = 1)
     avg_input_vec = np.zeros(words_compressed.shape[1])
+    print ("words compressed shape:", words_compressed.shape)
 
     for word in keywords:
         if word in word_to_int_dict:
