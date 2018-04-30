@@ -4,6 +4,8 @@ import numpy as np
 import re
 import os
 import math
+import enchant
+d = enchant.Dict("en_US")
 
 """takes in a list of strings representing
 json objects (which must be in the current directory)
@@ -87,8 +89,8 @@ def process_list_of_jsons(lst_of_jsons):
                 if len(tags) != 0:#don't count posts with no tags at least for now
                     for d_token in tokenized_description:
                         if d_token not in bad_words:
-
-                            word_set.add(d_token)
+                            if(d.check(d_token)==True)
+                                word_set.add(d_token)
 
                             if d_token in word_freq_dict:
                                 word_freq_dict[d_token] += 1
