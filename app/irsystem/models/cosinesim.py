@@ -30,6 +30,12 @@ def get_likescore(tag):
 def get_totalposts(tag):
     return mydict[tag][2]
 
+def statistics_top_hashtags(top_hashtags):
+    statistics = {}
+    for hshtg in top_hashtags:
+        statistics[hshtg] = {"avg_likes": get_avglikes(hshtg), "like_score": get_likescore(hshtg), total_posts: get_totalposts(hshtg)}
+    return statistics
+
 def json_list():
     path_to_json_dir = os.path.dirname(os.path.abspath(__file__))+'/../../static/json'
     for _, _, filenames in os.walk(path_to_json_dir):

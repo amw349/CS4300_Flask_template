@@ -1,7 +1,7 @@
 from . import *
 from app.irsystem.models.helpers import *
 from app.irsystem.models.helpers import NumpyEncoder as NumpyEncoder
-from app.irsystem.models.cosinesim import input_to_tags
+from app.irsystem.models.cosinesim import input_to_tags, statistics_top_hashtags
 from app.irsystem.models.parsers_and_TFidf_setup import process_list_of_jsons
 from numpy import linalg as LA
 from scipy.sparse.linalg import svds
@@ -65,6 +65,7 @@ def search():
         # rochio(input_query,list_of_disliked_hashtags, list_of_liked_hashtags, word_to_int_dict, tag_inv_idx)
         print ("Seach input:", input_query)
         # output = input_to_tags(input_query, word_to_int_dict, post_dict, [])
+        # statistics = statistics_top_hashtags(output)
         return render_template('search.html', name=project_name, netids=netids, form=form, form_submitted_status=form_submitted, output=["#1", "#2", "#3", "#4", "#5"])
     return render_template('search.html', name=project_name, netids=netids, form=form)
 
