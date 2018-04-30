@@ -6,6 +6,8 @@ import re
 import math
 
 int_to_word_dict = {}
+post_dict = {}
+
 
 def serve_jsons():
     path_to_json_dir = os.getcwd()+'/../../static/json/'
@@ -19,12 +21,10 @@ def process_list_of_jsons(lst_of_jsons):
     basedir = os.getcwd()+'/../../../app/static/json/'
     post_count = 0
     real_data = {}
-    post_dict = {}
     word_set = set()
     tag_set = set()
     word_freq_dict = {}
     num_jsons_tag_appears_in = {}
-    post_count = 0
     bad_words = {'',' ','  ', ',' '!', 'a', 'about','above','after','again','against','all','am','an','and','any',\
                  'are','aren','as','at','be','because','been','before','being','below','between',\
                  'both','but','by','can','cannot','could','couldn','did','didn','do','does','doesn',\
@@ -47,7 +47,8 @@ def process_list_of_jsons(lst_of_jsons):
             for post in posts:
                 description = post['description']
                 tags = post['tags']
-
+                post_dict[post_count] = tags
+                post_count+=1
                 tokenized_description = prepareDescription(description)
                 if len(tags) != 0:#don't count posts with no tags at least for now
                     for d_token in tokenized_description:
@@ -179,3 +180,12 @@ with open('inverted_index.csv', 'w') as csvfile:
 
     for k in inverted_index.keys():
         writer.writerow({'word': k, 'array':np.array_str(inverted_index[k])})
+
+with open('post_dict.csv', 'w') as csvfile:
+    fieldnames = ['post', 'tags']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+    writer.writeheader()
+
+    for k in inverted_index.keys():
+        writer.writerow({'post': k, 'tags':post_dict[k]})
