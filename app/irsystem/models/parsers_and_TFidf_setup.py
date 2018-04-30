@@ -99,7 +99,7 @@ def process_list_of_jsons(lst_of_jsons):
                     for t_token in tags:
                         tag_set.add(prepareTag(t_token))
                         json_tag_set.add(prepareTag(t_token))
-                    post_dict[post_count] = post
+                    post_dict[post_count] = tags
                     post_count += 1
             except:
                 #print ("----failed")
