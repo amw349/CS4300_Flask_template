@@ -46,8 +46,14 @@ label{
   margin: .5% 0 .5% 0
 }
 
+.btn-info.tag_buttons{
+  background-color: transparent;
+  border-color: transparent;
+}
+
 .selected-hashtag-container{
   margin: 1% 0 1% 0;
+  padding: 1% 0 1% 0;
 }
 
 #load {
@@ -76,6 +82,11 @@ label{
   font-family: 'Billabong';
   font-size: 	2em;
   font-size: 400%;
+  text-align: center;
+}
+
+i.fas.fa-heart{
+  display: none;
 }
 
 input{
