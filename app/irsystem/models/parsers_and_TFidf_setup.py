@@ -49,7 +49,7 @@ def fallback_tags(lst_of_wrds, loc=""):
 def process_list_of_jsons(lst_of_jsons):
     #get the set of all words and a seperate set of all tags
     #also put every post a in post dict and assign it a number
-    basedir = os.getcwd()+'/../../../app/static/json/'
+    basedir = os.getcwd()+'/app/static/json/'
     post_dict = {}
     word_set = set()
     tag_set = set()
@@ -203,7 +203,7 @@ def process_list_of_jsons(lst_of_jsons):
                     doc_norms[post_counter] = math.sqrt(idf_score_sq_sum)
                     post_counter += 1
                     #print(post_counter)
-            except TypeError:
+            except:
                 pass
 
             for tag in tag_inv_idx:
