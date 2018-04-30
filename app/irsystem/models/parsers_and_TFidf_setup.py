@@ -4,7 +4,7 @@ import numpy as np
 import re
 import os
 import math
-import pyenchant
+import enchant
 
 d = enchant.Dict("en_US")
 
@@ -73,7 +73,6 @@ def process_list_of_jsons(lst_of_jsons):
                  'would','wouldn','you','your','yours','yourself', 'yourselves'}
 
     for json_name in lst_of_jsons:
-        #print(json_name)
         data = {}
         json_tag_set = set()
         with open(basedir+json_name) as f:
@@ -85,7 +84,10 @@ def process_list_of_jsons(lst_of_jsons):
             try:
                 description = post['description']
                 tags = post['tags']
-
+                new_tags = []
+                for tag in tags:
+                    tmp = str(tag)
+                    new_tags.append(tmp)
                 tokenized_description = prepareDescription(description)
                 if len(tags) != 0:#don't count posts with no tags at least for now
                     for d_token in tokenized_description:
@@ -99,10 +101,10 @@ def process_list_of_jsons(lst_of_jsons):
                                 word_freq_dict[d_token]=1
 
 
-                    for t_token in tags:
+                    for t_token in new_tags:
                         tag_set.add(prepareTag(t_token))
                         json_tag_set.add(prepareTag(t_token))
-                    post_dict[post_count] = tags
+                    post_dict[post_count] = new_tags
                     post_count += 1
             except:
                 pass
@@ -170,6 +172,10 @@ def process_list_of_jsons(lst_of_jsons):
             try:
                 description = post['description']
                 tags = post['tags']
+                new_tags = []
+                for tag in tags:
+                    tmp = str(tag)
+                    new_tags.append(tmp)
                 tokenized_description = prepareDescription(description)
 
                 idf_score_sq_sum = 0
@@ -184,7 +190,7 @@ def process_list_of_jsons(lst_of_jsons):
 
                             word_TF_IDF[post_counter,word_to_int_dict[d_token]] = idf_dict[d_token]
 
-                    for t_token in tags:
+                    for t_token in new_tags:
                         t_token = prepareTag(t_token)#remove the leading hashtag
 
                         if t_token in tag_to_int_dict:
@@ -209,8 +215,8 @@ def process_list_of_jsons(lst_of_jsons):
 
     for tag in tag_inv_idx:
         tag_inv_idx[tag] = tag_inv_idx[tag]/tag_count[tag]
-    #print (tag_to_int_dict)
-    #print(tag_inv_idx)
+    # print (tag_to_int_dict)
+    # print(tag_inv_idx)
     return word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \
     word_TDF, tag_TDF, word_inv_idx, tag_inv_idx, post_dict, word_TF_IDF, doc_norms, idf_dict
 

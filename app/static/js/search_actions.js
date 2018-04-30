@@ -10,12 +10,13 @@ function showHashtagInfo(tag, button_id) {
     var button = document.getElementById(button_id);
     if (selected_tag_div.style.display === "none") {
         selected_tag_div.style.display = "block";
-        selected_tag_div.style.backgroundColor = "#5BC0DE";
+        selected_tag_div.style.textAlign = "left";
+        // selected_tag_div.style.backgroundColor = "#5BC0DE";
         button.style.opacity = .7;
         selected_tag_div.style.height = "100px";
     } else {
         selected_tag_div.style.display = "none";
-        button.style.backgroundColor = "#5BC0DE";
+        button.style.backgroundColor = "transparent";
         button.style.opacity = 1;
     }
 }
