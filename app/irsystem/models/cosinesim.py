@@ -7,11 +7,12 @@ import os
 
 good_tags={}
 # dict has keys = goodtag and values equal to list where the elements are avglikes, likescore, and totalposts
-with open('goodwords.csv') as csvfile:
+with open("goodwords.csv", 'rb') as f:
     mycsv = csv.reader(f, delimiter = ",")
     for x, row in enumerate(mycsv):
+        print(row)
         if x!=0:
-            good_tags[row[0]] = [int(row[1]), int(row[2]), int(row[3])]
+            good_tags[row[0]] = [float(row[1]), float(row[2]), float(row[3])]
 
 def json_list():
     path_to_json_dir = os.path.dirname(os.path.abspath(__file__))+'/../../static/json'
