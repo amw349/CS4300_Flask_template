@@ -4,6 +4,12 @@ from scipy.sparse.linalg import svds
 from sklearn.preprocessing import normalize
 import os
 
+good_tags={}
+    with open('goodwords.csv') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            good_tags[row['goodword']]='avglikes'
+
 def json_list():
     path_to_json_dir = os.path.dirname(os.path.abspath(__file__))+'/../../static/json'
     for _, _, filenames in os.walk(path_to_json_dir):
