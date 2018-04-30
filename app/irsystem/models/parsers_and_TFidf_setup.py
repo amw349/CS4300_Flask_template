@@ -49,7 +49,7 @@ def fallback_tags(lst_of_wrds, loc=""):
 def process_list_of_jsons(lst_of_jsons):
     #get the set of all words and a seperate set of all tags
     #also put every post a in post dict and assign it a number
-    basedir = os.getcwd()+'/app/static/json/'
+    basedir = os.getcwd()+'/../../../app/static/json/'
     post_dict = {}
     word_set = set()
     tag_set = set()
@@ -140,7 +140,6 @@ def process_list_of_jsons(lst_of_jsons):
 
     num_words = len(word_to_int_dict)
     num_tags = len(tag_to_int_dict)
-    print(num_tags)
 
     word_TDF = np.zeros((num_posts,num_words))
     tag_TDF = np.zeros((num_posts,num_tags))
@@ -206,14 +205,13 @@ def process_list_of_jsons(lst_of_jsons):
             except:
                 pass
 
-            for tag in tag_inv_idx:
-                tag_inv_idx[tag] = tag_inv_idx[tag]/tag_count[tag]
+    for tag in tag_inv_idx:
+        tag_inv_idx[tag] = tag_inv_idx[tag]/tag_count[tag]
     #print (tag_to_int_dict)
     #print(tag_inv_idx)
     return word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \
     word_TDF, tag_TDF, word_inv_idx, tag_inv_idx, post_dict, word_TF_IDF, doc_norms, idf_dict
 
-    #print(tag_inv_idx)
 
 def tf_idf_vectorize(word_lst,idf_dict, word_to_int_dict):
     vec = np.zeros(len(idf_dict))

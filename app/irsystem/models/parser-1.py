@@ -1,20 +1,20 @@
+from parsers_and_TFidf_setup import *
 import csv
 import os
 import json
 import numpy as np
 import re
 import math
-from parsers_and_TFidf_setup.py import *
 
 post_dict = {}
 
 def serve_jsons():
-    path_to_json_dir = os.getcwd()+'/../../static/json/'
+    path_to_json_dir = os.getcwd()+'/../../../app/static/json/'
     for _, _, filenames in os.walk(path_to_json_dir):
         json_files = [ f for f in filenames if f.endswith("json") ]
     return json_files
 
-def process_list_of_jsons(lst_of_jsons):
+def process_list_of_jsons2(lst_of_jsons):
     #get the set of all words and a seperate set of all tags
     #also put every post a in post dict and assign it a number
     basedir = os.getcwd()+'/../../../app/static/json/'
@@ -38,18 +38,9 @@ def process_list_of_jsons(lst_of_jsons):
                     real_data[author] = [(likes,tags)]
         except :
             pass
-    sorted_words = sorted(word_set)
-    i=-1
-    for word in sorted_words:
-        i+=1
-        word_to_int_dict[word]=i
-        int_to_word_dict[i]=word
     return real_data
 
-crawledposts = process_list_of_jsons(serve_jsons())
-word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \
-    word_TDF, tag_TDF, word_inv_idx, tag_inv_idx, post_dict, word_TF_IDF, doc_norms, idf_dict = process_list_of_jsons(serve_jsons)
-
+crawledposts = process_list_of_jsons2(serve_jsons())
 
 with open("../../../../media.csv", 'rb') as f:
     mycsv = csv.reader(f, delimiter = ";")
@@ -129,7 +120,11 @@ with open("../../../../media.csv", 'rb') as f:
         for (x,y) in assoclist[tag]:
             tmp+=float(y)/float(avg_author_likes[x]+1)
         assoclist[tag] = float(tmp)/float(num_post+1)
-        
+
+word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \
+    word_TDF, tag_TDF, word_inv_idx, tag_inv_idx, post_dict, word_TF_IDF, doc_norms, idf_dict = process_list_of_jsons(serve_jsons())
+print(word_to_int_dict)
+
 with open('goodwords.csv', 'w') as csvfile:
     fieldnames = ['goodword', 'avglikes', 'likescore', 'totalposts']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
@@ -146,7 +141,8 @@ with open('word_to_int.csv', 'w') as csvfile:
     writer.writeheader()
 
     for k in word_to_int_dict.keys():
-        writer.writerow({'word': k, 'index':word_to_int[k]})
+        print("here")
+        writer.writerow({'word': k, 'index':word_to_int_dict[k]})
 
 with open('inverted_index.csv', 'w') as csvfile:
     fieldnames = ['word', 'numpyarray']
@@ -154,8 +150,9 @@ with open('inverted_index.csv', 'w') as csvfile:
 
     writer.writeheader()
 
-    for k in word_inv_idx.keys():
-        writer.writerow({'word': k, 'array':np.array_str(inverted_index[k])})
+    for k in tag_inv_idx.keys():
+        # print(np.array2string(tag_inv_idx[k], precision=2, separator=',', suppress_small=True))
+        writer.writerow({'word': k, 'numpyarray':np.array_str(tag_inv_idx[k])})
 
 with open('post_dict.csv', 'w') as csvfile:
     fieldnames = ['post', 'tags']
