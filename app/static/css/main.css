@@ -56,6 +56,10 @@ label{
   padding: 1% 0 1% 0;
 }
 
+.status-liked{
+  color: #FF0000;
+}
+
 #load {
   border: 4px solid #DBDBDB;
   border-radius: 50%;
@@ -83,10 +87,6 @@ label{
   font-size: 	2em;
   font-size: 400%;
   text-align: center;
-}
-
-i.fas.fa-heart{
-  display: none;
 }
 
 input{
