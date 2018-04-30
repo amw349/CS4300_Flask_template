@@ -10,7 +10,7 @@ with open("goodwords.csv", 'rb') as f:
 	mycsv = csv.reader(f, delimiter = ",")
 	for x, row in enumerate(mycsv):
 		if x!=0:
-			mydict[row[0]] = [row[1], row[2], row[3]]
+			mydict[str(row[0])] = [row[1], row[2], row[3]]
 
 def	get_avglikes(tag):
 	return mydict[tag][0]
