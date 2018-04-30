@@ -7,6 +7,7 @@ import os
 
 good_tags={}
 # dict has keys = goodtag and values equal to list where the elements are avglikes, likescore, and totalposts
+
 with open("goodwords.csv", 'rb') as f:
     mycsv = csv.reader(f, delimiter = ",")
     for x, row in enumerate(mycsv):
@@ -68,14 +69,14 @@ def top_n_tags(top_posts, int_to_word_dict, n=10):
 
     return words[:10]
 
-def input_vec(td_mat, word_to_int_dict, keywords):
-    vec = np.zeros(td_mat.shape[1])
+def input_vec(word_to_int_dict, keywords):
+    vec = np.zeros(len(word_to_int_dict))
     for w in keywords:
         if w in word_to_int_dict:
             vec[word_to_int_dict[w]] = 1
     return vec
 
-def input_to_tags(input_text, td_mat, word_to_int_dict, post_dict, int_to_word_dict, k=10):
+def input_to_tags(input_text, word_to_int_dict, post_dict, int_to_word_dict, k=10):
     print("MIGHT BE WORKING")
     cosine_sims=[]
     top_posts=[]
@@ -103,7 +104,7 @@ def input_to_tags(input_text, td_mat, word_to_int_dict, post_dict, int_to_word_d
 
     cosine_sims = np.argsort(cosine_sims)[::-1]
     top_words = [int_to_word_dict[i] for i in cosine_sims]
-    vec = input_vec(td_mat, word_to_int_dict, top_words[:10])
+    vec = input_vec(word_to_int_dict, top_words[:10])
 
     post_scores = []
     for i in range(0, td_mat.shape[0]):
@@ -111,7 +112,7 @@ def input_to_tags(input_text, td_mat, word_to_int_dict, post_dict, int_to_word_d
         sim = sim / ((LA.norm(vec)) * (LA.norm(td_mat[i])))
         post_scores.append(sim)
     post_arg_scores = np.argsort(post_scores)[::-1]
-    top_tags = [(post_dict[j]['tags'], post_scores[j]) for j in post_arg_scores]
+    top_tags = [(post_dict[j], post_scores[j]) for j in post_arg_scores]
     final_lst = []
     for tup in top_tags:
         for tag in tup[0]:
@@ -120,7 +121,25 @@ def input_to_tags(input_text, td_mat, word_to_int_dict, post_dict, int_to_word_d
     return final_lst[:10]
 
 if __name__ == "__main__":
-    word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \
-    word_TDF, tag_TDF, word_inv_idx, tag_inv_idx, post_dict, word_TF_IDF, doc_norms, idf_dict = process_list_of_jsons(['atighteru.json', 'balous_friends.json'])
+    print("reading word to int")
+    word_to_int = {}
+    with open("word_to_int.csv", 'rb') as f:
+        mycsv = csv.reader(f, delimiter = ",")
+        for x, row in enumerate(mycsv):
+            if x!=0:
+                mydict[row[0]] = int(row[1])
+    print("reading post to tags")
+    post_dict = {}
+    with open("/post_dict.csv", 'rb') as f:
+        mycsv = csv.reader(f, delimiter = ",")
+        for x, row in enumerate(mycsv):
+            if x!=0:
+                mydict[row[0]] = (row[1])
+    print(input_to_tags("merry christmas", word_to_int_dict, post_dict, int_to_word_dict, k=10))
 
-    print(input_to_tags("merry christmas", word_TDF, word_to_int_dict, post_dict, int_to_word_dict, k=10))
+    
+#    word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \
+#    word_TDF, tag_TDF, word_inv_idx, tag_inv_idx, post_dict, word_TF_IDF, doc_norms, idf_dict = process_list_of_jsons(['atighteru.json', 'balous_friends.json'])
+
+#    print(input_to_tags("merry christmas", word_TDF, word_to_int_dict, post_dict, int_to_word_dict, k=10))
+
