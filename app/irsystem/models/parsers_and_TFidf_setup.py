@@ -94,7 +94,7 @@ def process_list_of_jsons(lst_of_jsons):
                 if len(tags) != 0:#don't count posts with no tags at least for now
                     for d_token in tokenized_description:
                         if d_token not in bad_words:
-                            if(d.check(d_token)==True)
+                            if(d.check(d_token)==True):
                                 word_set.add(d_token)
 
                             if d_token in word_freq_dict:
