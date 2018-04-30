@@ -152,7 +152,7 @@ with open('inverted_index.csv', 'w') as csvfile:
 
     for k in tag_inv_idx.keys():
         # print(np.array2string(tag_inv_idx[k], precision=2, separator=',', suppress_small=True))
-        writer.writerow({'word': k, 'numpyarray':np.array_str(tag_inv_idx[k])})
+        writer.writerow({'word': k, 'numpyarray':np.array2string(tag_inv_idx[k], precision=2, separator=',', suppress_small=True)})
 
 with open('post_dict.csv', 'w') as csvfile:
     fieldnames = ['post', 'tags']
