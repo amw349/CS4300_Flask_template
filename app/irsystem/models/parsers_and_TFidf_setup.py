@@ -151,9 +151,9 @@ def process_list_of_jsons(lst_of_jsons):
     tag_inv_idx = {}
 
     #create the empty word_inv_idx
-    word_inv_idx = [[] for _ in range(num_words)] #use this if in for python3
+    #word_inv_idx = [[] for _ in range(num_words)] #use this if in for python3
     #tag_inv_idx = [[] for _ in range(num_tags)] #use this if in for python3
-    #word_inv_idx = [list([]) for _ in xrange(num_words)]
+    word_inv_idx = [list([]) for _ in xrange(num_words)]
     #tag_inv_idx = [list([]) for _ in xrange(num_tags)]
     doc_norms = np.zeros(num_posts)
     #print (idf)
