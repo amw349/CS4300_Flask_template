@@ -4,7 +4,7 @@ import numpy as np
 import re
 import os
 import math
-import pyenchant
+import enchant
 
 d = enchant.Dict("en_US")
 
@@ -85,7 +85,10 @@ def process_list_of_jsons(lst_of_jsons):
             try:
                 description = post['description']
                 tags = post['tags']
-
+                new_tags = []
+                for tag in tags:
+                    tmp = str(tag)
+                    new_tags.append = tmp[1:]
                 tokenized_description = prepareDescription(description)
                 if len(tags) != 0:#don't count posts with no tags at least for now
                     for d_token in tokenized_description:
@@ -102,7 +105,7 @@ def process_list_of_jsons(lst_of_jsons):
                     for t_token in tags:
                         tag_set.add(prepareTag(t_token))
                         json_tag_set.add(prepareTag(t_token))
-                    post_dict[post_count] = tags
+                    post_dict[post_count] = new_tags
                     post_count += 1
             except:
                 pass
