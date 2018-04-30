@@ -5,3 +5,4 @@ irsystem = Blueprint('irsystem', __name__, url_prefix='/',static_folder='static'
 
 # Import all controllers
 from controllers.search_controller import *
+from controllers.splash_controller import *
