@@ -4,6 +4,7 @@ from scipy.sparse.linalg import svds
 from sklearn.preprocessing import normalize
 import csv
 import os
+import numpy as np
 
 good_tags={}
 # dict has keys = goodtag and values equal to list where the elements are avglikes, likescore, and totalposts
@@ -82,10 +83,9 @@ def input_to_tags(input_text, word_to_int_dict, post_dict, int_to_word_dict, k=1
     top_posts=[]
     count=0
     keywords = cleanup(input_text)
-    print("td mat is", td_mat)
     # docs_compressed, x, words_compressed = svds(td_mat.astype(float), k=10)
     print("MIGHT BE WORKING")
-    words_compressed = np.load('words_compressed.npy')
+    words_compressed = np.load(os.getcwd()+'/app/irsystem/models/words_compressed.npy')
     words_compressed = normalize(words_compressed, axis = 1)
     avg_input_vec = np.zeros(words_compressed.shape[1])
 
@@ -137,9 +137,8 @@ if __name__ == "__main__":
                 mydict[row[0]] = (row[1])
     print(input_to_tags("merry christmas", word_to_int_dict, post_dict, int_to_word_dict, k=10))
 
-    
+
 #    word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \
 #    word_TDF, tag_TDF, word_inv_idx, tag_inv_idx, post_dict, word_TF_IDF, doc_norms, idf_dict = process_list_of_jsons(['atighteru.json', 'balous_friends.json'])
 
 #    print(input_to_tags("merry christmas", word_TDF, word_to_int_dict, post_dict, int_to_word_dict, k=10))
-

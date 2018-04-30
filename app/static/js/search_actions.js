@@ -20,16 +20,3 @@ function showHashtagInfo(tag, button_id) {
         button.style.opacity = 1;
     }
 }
-
-function like_hashtag(status){
-  console.log("here");
-  if (status == 'True') {
-    console.log(status);
-    $(".nofill").hide();
-    $(".fill").show();
-  } else if (status=='False') {
-    console.log(status);
-    $(".fill").hide();
-    $(".nofill").show();
-  }
-}
