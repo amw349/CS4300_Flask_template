@@ -49,7 +49,7 @@ def fallback_tags(lst_of_wrds, loc=""):
 def process_list_of_jsons(lst_of_jsons):
     #get the set of all words and a seperate set of all tags
     #also put every post a in post dict and assign it a number
-    basedir = os.getcwd()+'/../../../app/static/json/'
+    basedir = os.getcwd()+'/app/static/json/'
     post_dict = {}
     word_set = set()
     tag_set = set()
@@ -87,8 +87,8 @@ def process_list_of_jsons(lst_of_jsons):
                 if len(tags) != 0:#don't count posts with no tags at least for now
                     for d_token in tokenized_description:
                         if d_token not in bad_words:
-
-                            word_set.add(d_token)
+                            if(d.check(d_token)==True):
+                                word_set.add(d_token)
 
                             if d_token in word_freq_dict:
                                 word_freq_dict[d_token] += 1
@@ -99,7 +99,7 @@ def process_list_of_jsons(lst_of_jsons):
                     for t_token in tags:
                         tag_set.add(prepareTag(t_token))
                         json_tag_set.add(prepareTag(t_token))
-                    post_dict[post_count] = post
+                    post_dict[post_count] = tags
                     post_count += 1
             except:
                 pass
@@ -140,7 +140,7 @@ def process_list_of_jsons(lst_of_jsons):
     num_words = len(word_to_int_dict)
     num_tags = len(tag_to_int_dict)
     print(num_tags)
-    
+
     word_TDF = np.zeros((num_posts,num_words))
     tag_TDF = np.zeros((num_posts,num_tags))
     word_TF_IDF = np.zeros((num_posts,num_words))
@@ -184,12 +184,12 @@ def process_list_of_jsons(lst_of_jsons):
 
                     for t_token in tags:
                         t_token = prepareTag(t_token)#remove the leading hashtag
-                        
+
                         if t_token in tag_to_int_dict:
-                            
+
                             tag_TDF[post_counter,tag_to_int_dict[t_token]] = 1
                             #Adds the current post index to the list of posts matched to that word
-                            
+
                             if t_token in tag_count:
                                 tag_count[t_token] += 1
                             else:
@@ -202,16 +202,16 @@ def process_list_of_jsons(lst_of_jsons):
                     doc_norms[post_counter] = math.sqrt(idf_score_sq_sum)
                     post_counter += 1
                     #print(post_counter)
-            except TypeError:
+            except:
                 pass
-            
+
             for tag in tag_inv_idx:
                 tag_inv_idx[tag] = tag_inv_idx[tag]/tag_count[tag]
     #print (tag_to_int_dict)
     #print(tag_inv_idx)
     return word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \
     word_TDF, tag_TDF, word_inv_idx, tag_inv_idx, post_dict, word_TF_IDF, doc_norms, idf_dict
-    
+
     #print(tag_inv_idx)
 
 def tf_idf_vectorize(word_lst,idf_dict, word_to_int_dict):
