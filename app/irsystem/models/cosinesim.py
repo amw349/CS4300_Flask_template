@@ -1,17 +1,13 @@
 from parsers_and_TFidf_setup import *
 from numpy import linalg as LA
 from scipy.sparse.linalg import svds
+from sklearn.preprocessing import normalize
 import os
 
 def json_list():
     path_to_json_dir = os.path.dirname(os.path.abspath(__file__))+'/../../static/json'
     for _, _, filenames in os.walk(path_to_json_dir):
         return filenames
-
-# profile_lst = ['amandabisk.json', 'andyspeer.json', 'atighteru.json', 'bodybysimone.json', 'gypsetgoddess.json', 'harleypasternak.json', 'izabelgoulart.json', 'jamesduigan.json', 'jaycardiello.json', 'laceystonefitness.json', 'lindseyvonn.json', 'mistyonpointe.json', 'nacimgoura.json', 'profile_alexisren.json', 'profile_cornellpresident.json', 'profile_davidmiron.json', 'rix.official.json', 'wellness_ed.json', 'zannavandijk.json']
-profile_lst = json_list()
-word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \
-word_TDF, tag_TDF, word_inv_idx, tag_inv_idx, post_dict, word_TF_IDF, doc_norms, idf_dict = process_list_of_jsons(profile_lst)
 
 def top_cosine_sim(post_dic, input_vec, td_mat):
     top_posts = []
@@ -64,18 +60,22 @@ def top_n_tags(top_posts, int_to_word_dict, n=10):
     return words[:10]
 
 def input_vec(td_mat, word_to_int_dict, keywords):
-    vec = np.zeros(td_mat.shape[0])
+    vec = np.zeros(td_mat.shape[1])
     for w in keywords:
         if w in word_to_int_dict:
             vec[word_to_int_dict[w]] = 1
     return vec
 
 def input_to_tags(input_text, td_mat, word_to_int_dict, post_dict, int_to_word_dict, k=10):
+    print("MIGHT BE WORKING")
     cosine_sims=[]
     top_posts=[]
     count=0
     keywords = cleanup(input_text)
-    words_compressed, x, docs_compressed = svds(td_mat.astype(float), k=2)
+    print("td mat is", td_mat)
+    docs_compressed, x, words_compressed = svds(td_mat.astype(float), k=10)
+    print("MIGHT BE WORKING")
+    words_compressed = words_compressed.transpose()
     words_compressed = normalize(words_compressed, axis = 1)
     avg_input_vec = np.zeros(words_compressed.shape[1])
 
@@ -92,45 +92,21 @@ def input_to_tags(input_text, td_mat, word_to_int_dict, post_dict, int_to_word_d
     for row in words_compressed:
         cosine_sims.append(np.dot(avg_input_vec, row))
 
-    cosine_sims = np.argsort(cosine_sims)
+    cosine_sims = np.argsort(cosine_sims)[::-1]
     top_words = [int_to_word_dict[i] for i in cosine_sims]
     vec = input_vec(td_mat, word_to_int_dict, top_words[:10])
 
     post_scores = []
-    for i in range(0, td_mat.shape[1]):
-        sim = np.dot(td_mat[:,i], vec)
-        sim = sim / ((LA.norm(vec)) * (LA.norm(td_mat[:,i])))
+    for i in range(0, td_mat.shape[0]):
+        sim = np.dot(td_mat[i], vec)
+        sim = sim / ((LA.norm(vec)) * (LA.norm(td_mat[i])))
         post_scores.append(sim)
-    post_scores = np.argsort(post_scores)
-    print(len(post_dict))
+    post_scores = np.argsort(post_scores)[::-1]
     top_tags = [post_dict[j]['tags'] for j in post_scores]
-    return []
+    return top_tags[0]
 
 if __name__ == "__main__":
-    word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
-    tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(['atighteru.json', 'balous_friends.json'])
+    word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \
+    word_TDF, tag_TDF, word_inv_idx, tag_inv_idx, post_dict, word_TF_IDF, doc_norms, idf_dict = process_list_of_jsons(['atighteru.json', 'balous_friends.json'])
 
-    in_vec = input_vec(word_to_int_dict, location, keywords)
-
-    top_cosine_posts,scores = top_cosine_sim(post_dict, in_vec, word_TDF)
-    tags = top_n_tags(num_tags, top_cosine_posts)
-    fallback_tag_lst = fallback_tags(keywords, loc="")
-
-    #for i in range (num_tags):
-    #    if scores[i] < 1:
-    #         tags[i] = fallback_tag_lst[i]
-    return tags
-
-def svd_decomp(td_mat):
-    u, s, v_trans = svds(td_mat, k=100)
-    return u, s, v_trans
-
-if __name__ == "__main__":
-    tags = input_to_tags("", "cornell technology create science research")
-    print(tags)
-    # word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
-    # tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(['profile_davidmiron.json'])
-    # print (post_dict)
-    # word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, word_TDF,\
-    # tag_TDF, word_inv_idx, tag_inv_idx, post_dict = process_list_of_jsons(['profile_davidmiron.json'])
-    # json_list()
+    print(input_to_tags("merry christmas", word_TDF, word_to_int_dict, post_dict, int_to_word_dict, k=10))
