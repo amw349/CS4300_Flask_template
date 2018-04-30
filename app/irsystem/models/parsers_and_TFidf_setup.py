@@ -102,7 +102,6 @@ def process_list_of_jsons(lst_of_jsons):
                     post_dict[post_count] = post
                     post_count += 1
             except:
-                #print ("----failed")
                 pass
         for tag in json_tag_set:
             if tag in num_jsons_tag_appears_in:
