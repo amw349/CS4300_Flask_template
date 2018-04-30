@@ -49,7 +49,7 @@ def fallback_tags(lst_of_wrds, loc=""):
 def process_list_of_jsons(lst_of_jsons):
     #get the set of all words and a seperate set of all tags
     #also put every post a in post dict and assign it a number
-    basedir = os.getcwd()+'/app/static/json/'
+    basedir = os.getcwd()+'/../../static/json/'
     post_dict = {}
     word_set = set()
     tag_set = set()
