@@ -115,7 +115,7 @@ def input_to_tags(input_text, td_mat, word_to_int_dict, post_dict, int_to_word_d
         for tag in tup[0]:
             final_lst.append((tag, tup[1]))
 
-    return final_lst
+    return final_lst[:10]
 
 if __name__ == "__main__":
     word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \
