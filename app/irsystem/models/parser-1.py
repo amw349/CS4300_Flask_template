@@ -123,6 +123,9 @@ with open("../../../../media.csv", 'rb') as f:
 
 word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \
     word_TDF, tag_TDF, word_inv_idx, tag_inv_idx, post_dict, word_TF_IDF, doc_norms, idf_dict = process_list_of_jsons(serve_jsons())
+# print(tag_inv_idx)
+# print(post_dict)
+print(word_to_int_dict)
 
 with open('goodwords.csv', 'w') as csvfile:
     fieldnames = ['goodword', 'avglikes', 'likescore', 'totalposts']

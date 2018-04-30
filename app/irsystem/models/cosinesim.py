@@ -9,11 +9,26 @@ import numpy as np
 good_tags={}
 # dict has keys = goodtag and values equal to list where the elements are avglikes, likescore, and totalposts
 
-with open("goodwords.csv", 'rb') as f:
+with open("goodwords.csv") as f:
     mycsv = csv.reader(f, delimiter = ",")
     for x, row in enumerate(mycsv):
         if x!=0:
             good_tags[row[0]] = [float(row[1]), float(row[2]), float(row[3])]
+
+def get_avglikes(tag):
+    return mydict[tag][0]
+
+def get_likescore(tag):
+    val = float(mydict[tag][1])
+    if val > 1:
+        return float(val-1)*1.0
+    elif val < 1:
+        return val*-1
+    elif val == 1:
+        return 0
+
+def get_totalposts(tag):
+    return mydict[tag][2]
 
 def json_list():
     path_to_json_dir = os.path.dirname(os.path.abspath(__file__))+'/../../static/json'
