@@ -5,6 +5,11 @@ import re
 import os
 import math
 
+def json_list():
+    path_to_json_dir = os.path.dirname(os.path.abspath(__file__))+'/../../static/json'
+    for _, _, filenames in os.walk(path_to_json_dir):
+        return filenames
+
 """takes in a list of strings representing
 json objects (which must be in the current directory)
 and treats each post like a document. Returns a

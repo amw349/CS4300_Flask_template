@@ -5,6 +5,8 @@ import numpy as np
 import re
 import math
 
+int_to_word_dict = {}
+
 def serve_jsons():
     path_to_json_dir = os.getcwd()+'/../../static/json/'
     for _, _, filenames in os.walk(path_to_json_dir):
@@ -17,14 +19,40 @@ def process_list_of_jsons(lst_of_jsons):
     basedir = os.getcwd()+'/../../../app/static/json/'
     post_count = 0
     real_data = {}
+    post_dict = {}
+    word_set = set()
+    tag_set = set()
+    word_freq_dict = {}
+    num_jsons_tag_appears_in = {}
+    post_count = 0
+    bad_words = {'',' ','  ', ',' '!', 'a', 'about','above','after','again','against','all','am','an','and','any',\
+                 'are','aren','as','at','be','because','been','before','being','below','between',\
+                 'both','but','by','can','cannot','could','couldn','did','didn','do','does','doesn',\
+                 'doing','don','down','during','each','few','for','from','further','had','hadn','has',\
+                 'hasn','have','haven','having','he','here','hers','herself','him','himself','his','how',\
+                 't','i','d','ll','m','ve','if','in','into','is','isn','it','its','itself','let','me','more',\
+                 'most','mustn','my','myself','no','nor','not','of','off','on','once','only','or','other',\
+                 'ought','our','ours','ourselves','out','over','own','same','shan','she','should','shouldn',\
+                 'so','some','such','than','that','the','their','theirs','them','themselves','then','there',\
+                 'they','this','those','through','to','too','under','until','up','very','was','wasn','we',\
+                 'were','weren','what','what','when','where','which','while','who','whom','why','with','won',\
+                 'would','wouldn','you','your','yours','yourself', 'yourselves'}
 
     for json_name in lst_of_jsons:
+        json_tag_set = set()
         with open(basedir+json_name) as f:
             data = json.load(f)
         posts = data['posts']
         try :
             for post in posts:
+                description = post['description']
                 tags = post['tags']
+
+                tokenized_description = prepareDescription(description)
+                if len(tags) != 0:#don't count posts with no tags at least for now
+                    for d_token in tokenized_description:
+                        if d_token not in bad_words:
+                            word_set.add(d_token)
                 likes = post['likes']
                 author = json_name
                 for x, tag in enumerate(tags):
@@ -36,6 +64,12 @@ def process_list_of_jsons(lst_of_jsons):
                     real_data[author] = [(likes,tags)]
         except :
             pass
+    sorted_words = sorted(word_set)
+    i=-1
+    for word in sorted_words:
+        i+=1
+        word_to_int_dict[word]=i
+        int_to_word_dict[i]=word
     return real_data
 
 crawledposts = process_list_of_jsons(serve_jsons())
@@ -127,3 +161,21 @@ with open('goodwords.csv', 'w') as csvfile:
 
     for k in goodwords.keys():
         writer.writerow({'goodword': k, 'avglikes': avglikes[k], 'likescore': assoclist[k], 'totalposts':totalposts[k]})
+
+with open('word_to_int.csv', 'w') as csvfile:
+    fieldnames = ['word', 'index']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+    writer.writeheader()
+
+    for k in word_to_int.keys():
+        writer.writerow({'word': k, 'index':word_to_int[k]})
+
+with open('inverted_index.csv', 'w') as csvfile:
+    fieldnames = ['word', 'numpyarray']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+    writer.writeheader()
+
+    for k in inverted_index.keys():
+        writer.writerow({'word': k, 'array':np.array_str(inverted_index[k])})
