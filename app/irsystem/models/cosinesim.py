@@ -98,15 +98,13 @@ def input_vec(word_to_int_dict, keywords):
             vec[word_to_int_dict[w]] = 1
     return vec
 
-def input_to_tags(input_text, word_to_int_dict, post_dict, int_to_word_dict, k=10):
-    print("MIGHT BE WORKING")
+def input_to_tags(input_text, td_mat, word_to_int_dict, post_dict, int_to_word_dict, k=10):
     cosine_sims=[]
     top_posts=[]
     count=0
     keywords = cleanup(input_text)
-    # docs_compressed, x, words_compressed = svds(td_mat.astype(float), k=10)
-    print("MIGHT BE WORKING")
     words_compressed = np.load(os.getcwd()+'/app/irsystem/models/words_compressed.npy')
+    words_compressed = np.transpose(words_compressed)
     words_compressed = normalize(words_compressed, axis = 1)
     avg_input_vec = np.zeros(words_compressed.shape[1])
     print ("words compressed shape:", words_compressed.shape)
@@ -115,7 +113,6 @@ def input_to_tags(input_text, word_to_int_dict, post_dict, int_to_word_dict, k=1
         if word in word_to_int_dict:
             count = count + 1
             avg_input_vec = avg_input_vec + words_compressed[word_to_int_dict[word]]
-
     try:
         avg_input_vec = avg_input_vec / count
     except:
