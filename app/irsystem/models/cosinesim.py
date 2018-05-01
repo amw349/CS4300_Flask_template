@@ -32,6 +32,12 @@ def get_likescore(tag):
 def get_totalposts(tag):
     return mydict[tag][2]
 
+def statistics_top_hashtags(top_hashtags):
+    statistics = {}
+    for hshtg in top_hashtags:
+        statistics[hshtg] = {"avg_likes": get_avglikes(hshtg), "like_score": get_likescore(hshtg), total_posts: get_totalposts(hshtg)}
+    return statistics
+
 def json_list():
     path_to_json_dir = os.path.dirname(os.path.abspath(__file__))+'/../../static/json'
     for _, _, filenames in os.walk(path_to_json_dir):
@@ -133,6 +139,11 @@ def input_to_tags(input_text, td_mat, word_to_int_dict, post_dict, int_to_word_d
         final_tags.append((x, good_tags[x[1:]][1]))
     return final_tags
     print(final_tags)
+    # words_compressed = np.load(os.getcwd()+'/app/irsystem/models/words_compressed.npy')
+    # words_compressed = np.transpose(words_compressed)
+    # words_compressed = normalize(words_compressed, axis = 1)
+    # avg_input_vec = np.zeros(words_compressed.shape[1])
+    # print ("words compressed shape:", words_compressed.shape)
 
 
 if __name__ == "__main__":
