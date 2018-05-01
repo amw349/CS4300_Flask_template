@@ -1,61 +1,50 @@
-var w = 500,
-	h = 500;
+// Data
+var stats1 = []
+
+for (tag_tuple_idx in top_hashtags) {
+  stats1.push({axis: top_hashtags[tag_tuple_idx][0], value: top_hashtags[tag_tuple_idx][1]});
+}
+
+console.log("stasts", stats1);
+
+// Data to feed into the graph
+var d = [stats1, stats1]
+console.log("d", d);
+
+var w = 250,
+	h = 300;
 
 var colorscale = d3.scale.category10();
 
 //Legend titles
-var LegendOptions = ['Smartphone','Tablet'];
+var LegendOptions = ['Average likes','Tablet'];
 
-//Data
-var d = [
-		  [
-			{axis:"Email",value:0.59},
-			{axis:"Social Networks",value:0.56},
-			{axis:"Internet Banking",value:0.42},
-			{axis:"News Sportsites",value:0.34},
-			{axis:"Search Engine",value:0.48},
-			{axis:"View Shopping sites",value:0.14},
-			{axis:"Paying Online",value:0.11},
-			{axis:"Buy Online",value:0.05},
-			{axis:"Stream Music",value:0.07},
-			{axis:"Online Gaming",value:0.12},
-			{axis:"Navigation",value:0.27},
-			{axis:"App connected to TV program",value:0.03},
-			{axis:"Offline Gaming",value:0.12},
-			{axis:"Photo Video",value:0.4},
-			{axis:"Reading",value:0.03},
-			{axis:"Listen Music",value:0.22},
-			{axis:"Watch TV",value:0.03},
-			{axis:"TV Movies Streaming",value:0.03},
-			{axis:"Listen Radio",value:0.07},
-			{axis:"Sending Money",value:0.18},
-			{axis:"Other",value:0.07},
-			{axis:"Use less Once week",value:0.08}
-		  ],[
-			{axis:"Email",value:0.48},
-			{axis:"Social Networks",value:0.41},
-			{axis:"Internet Banking",value:0.27},
-			{axis:"News Sportsites",value:0.28},
-			{axis:"Search Engine",value:0.46},
-			{axis:"View Shopping sites",value:0.29},
-			{axis:"Paying Online",value:0.11},
-			{axis:"Buy Online",value:0.14},
-			{axis:"Stream Music",value:0.05},
-			{axis:"Online Gaming",value:0.19},
-			{axis:"Navigation",value:0.14},
-			{axis:"App connected to TV program",value:0.06},
-			{axis:"Offline Gaming",value:0.24},
-			{axis:"Photo Video",value:0.17},
-			{axis:"Reading",value:0.15},
-			{axis:"Listen Music",value:0.12},
-			{axis:"Watch TV",value:0.1},
-			{axis:"TV Movies Streaming",value:0.14},
-			{axis:"Listen Radio",value:0.06},
-			{axis:"Sending Money",value:0.16},
-			{axis:"Other",value:0.07},
-			{axis:"Use less Once week",value:0.17}
-		  ]
-		];
+// //Data
+// var d = [
+// 		  [
+// 			{axis:"Email",value:0.59},
+// 			{axis:"Social Networks",value:0.56},
+// 			{axis:"Internet Banking",value:0.42},
+// 			{axis:"News Sportsites",value:0.34},
+// 			{axis:"Search Engine",value:0.48},
+// 			{axis:"View Shopping sites",value:0.14},
+// 			{axis:"Paying Online",value:0.11},
+// 			{axis:"Buy Online",value:0.05},
+// 			{axis:"Stream Music",value:0.07},
+// 			{axis:"Online Gaming",value:0.12}
+// 		  ],[
+// 			{axis:"Email",value:0.48},
+// 			{axis:"Social Networks",value:0.41},
+// 			{axis:"Internet Banking",value:0.27},
+// 			{axis:"News Sportsites",value:0.28},
+// 			{axis:"Search Engine",value:0.46},
+// 			{axis:"View Shopping sites",value:0.29},
+// 			{axis:"Paying Online",value:0.11},
+// 			{axis:"Buy Online",value:0.14},
+// 			{axis:"Stream Music",value:0.05},
+// 			{axis:"Online Gaming",value:0.19}
+// 		  ]
+// 		];
 
 //Options for the Radar chart, other than default
 var mycfg = {
@@ -88,7 +77,7 @@ var text = svg.append("text")
 	.attr("y", 10)
 	.attr("font-size", "12px")
 	.attr("fill", "#404040")
-	.text("What % of owners use a specific service in a week");
+	.text("Type of statistic");
 
 //Initiate Legend
 var legend = svg.append("g")

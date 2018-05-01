@@ -12,6 +12,11 @@
         .liquidFillGaugeText { font-family: Helvetica; font-weight: bold; }
     </style>
     <link rel="stylesheet" href="/static/css/main.css">
+    {% if output %}
+    <script type="text/javascript">
+      var top_hashtags = {{ output|tojson }}
+   </script>
+   {% endif %}
 </head>
 <body>
 <div class="container">
@@ -41,19 +46,24 @@
                     <form class="form-inline" action="">
                         {% if output %}
                         <p class="section-title">Top #'s to use</p>
-                        <div class="hashtags-output-container text-center">
-                          <div class="row">
-                            {% for tag in output %}
-                            {% set button_id = tag[1:] + "-btn" %}
-                            <!-- Display all hashtag buttons -->
-                            <button type="button" onclick="showHashtagInfo('{{tag[1:]}}', '{{button_id}}')"
-                                    id={{button_id}} class="btn btn-info tag_buttons">
-                                    <span style="font-family: Billabong">{{tag[0]}}</span>{{tag[1:]}}
-                            </button>
-                            {% endfor %}
-                          </div>
-                          <div class="row">
+                        <div class="hashtags-output-container row text-center">
+                          <div class="col-md-9 results-container">
+                            {% set test_data = [[("cash", 5), ("run", 6)], [("hi", 3), ("bye", 4)]] %}
                             <div id="chart"></div>
+                          </div>
+                          <div class="col-md-3 results-container">
+                            {% for tag in output %}
+                            {% set button_id = tag[0] + "-btn" %}
+                            <div class="row"><button id={{button_id}} class="btn btn-info tag_buttons"><span style="font-family: Billabong">{{tag[0][0]}}</span>{{tag[0][1:]}}</button></div>
+                            <!-- Display all hashtag buttons -->
+                            <!-- <button type="button"
+                                    id={{button_id}} class="btn btn-info tag_buttons">
+                                    <span style="font-family: Billabong">{{tag[0][0]}}</span>{{tag[0][1:]}}
+                            </button> -->
+                            <!-- <button type"button" class="btn btn-info tag_buttons">
+                                    <span>{{tag[0]}}</span>
+                            </button> -->
+                            {% endfor %}
                           </div>
                         </div>
                         {% endif %}

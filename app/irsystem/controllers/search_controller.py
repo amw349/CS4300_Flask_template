@@ -8,47 +8,38 @@ from scipy.sparse.linalg import svds
 import os
 import ast
 import csv
-
+#
 # def serve_jsons():
-#     path_to_json_dir = os.getcwd()+'/app/static/json/'
+#     path_to_json_dir = os.path.dirname(os.path.abspath(__file__))+'/../../static/json'
+#     # path_to_json_dir = os.getcwd()+'/app/static/json/'
+#     json_files = []
 #     for _, _, filenames in os.walk(path_to_json_dir):
-#         json_files = [ f for f in filenames if f.endswith("json") ]
-#         return json_files
-
+#         json_files = [ '{}/{}'.format(path_to_json_dir,f) for f in filenames if f.endswith("json") ]
+#     return json_files
+#
 # profile_lst = serve_jsons()
 # word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \
 # word_TDF, tag_TDF, word_inv_idx, tag_inv_idx, post_dict, word_TF_IDF, doc_norms, idf_dict = process_list_of_jsons(profile_lst)
-int_to_word_dict = {}
-word_to_int_dict = {}
-with open(os.getcwd()+"/app/irsystem/models/word_to_int.csv", 'rb') as f:
-    mycsv = csv.reader(f, delimiter = ",")
-    for x, row in enumerate(mycsv):
-        if x!=0:
-            word_to_int_dict[row[0]] = int(row[1])
-            int_to_word_dict[int(row[1])] = row[0]
+# int_to_word_dict = {}
+# word_to_int_dict = {}
 
-post_dict = {}
-with open(os.getcwd()+"/app/irsystem/models/post_dict.csv", 'rb') as f:
-    mycsv = csv.reader(f, delimiter = ",")
-    for x, row in enumerate(mycsv):
-        if x!=0:
-            post_dict[row[0]] = (row[1])
-
-# numWords = len(word_to_int_dict)
-# inverted_index = {}
-# with open("/../models/inverted_index.csv", 'r') as f:
+# word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \
+# word_TDF, tag_TDF, word_inv_idx, tag_inv_idx, post_dict, word_TF_IDF, doc_norms, idf_dict = process_list_of_jsons(serve_jsons())
+#
+# with open(os.getcwd()+"/app/irsystem/models/word_to_int.csv", 'rb') as f:
 #     mycsv = csv.reader(f, delimiter = ",")
 #     for x, row in enumerate(mycsv):
-#         #if x==0: print (row)
-#         #if x%1000==0: print (x)
-#         arr = np.zeros(numWords)
-#         for enum, e in enumerate(row):
-#             if enum==0:
-#                 tag = e
-#             else:
-#                 e=ast.literal_eval(e)
-#                 arr[e[0]]=e[1]
-#         inverted_index[row[0]] = arr
+#         if x!=0:
+#             word_to_int_dict[row[0]] = int(row[1])
+#             int_to_word_dict[int(row[1])] = row[0]
+#
+# post_dict = {}
+# with open(os.getcwd()+"/app/irsystem/models/post_dict.csv", 'rb') as f:
+#     mycsv = csv.reader(f, delimiter = ",")
+#     for x, row in enumerate(mycsv):
+#         if x!=0:
+#             post_dict[row[0]] = (row[1])
+
 
 project_name = "#yourPhoto"
 netids = ["Jake Bareket (jhb334)", "Anya Chopra (ac948)", "Michael Herbstman (mh856)", "David Miron (dm585)", "Alexandra Ward (amw349)"]
@@ -65,9 +56,10 @@ def search():
         input_query = request.form['input_query']
         # rochio(input_query,list_of_disliked_hashtags, list_of_liked_hashtags, word_to_int_dict, tag_inv_idx)
         print ("Seach input:", input_query)
-        # output = input_to_tags(input_query, word_to_int_dict, post_dict, int_to_word_dict)
+        # output = input_to_tags(input_query, word_to_int_dict, post_dict, int_to_word_dict, word_TF_IDF)
+        # print ("OUTPUT:", output)
         # statistics = statistics_top_hashtags(output)
-        return render_template('search.html', name=project_name, netids=netids, form=form, form_submitted_status=form_submitted, output=["#1", "#2", "#3"])
+        return render_template('search.html', name=project_name, netids=netids, form=form, form_submitted_status=form_submitted, output=[("testing1", 2), ("testing2", 3), ("testing2", 3), ("testing2", 3), ("testing2", 3), ("testing2", 3), ("testing2", 3)])
     return render_template('search.html', name=project_name, netids=netids, form=form)
 
 # if __name__ == "__main__":

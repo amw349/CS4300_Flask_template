@@ -21,7 +21,7 @@ var RadarChart = {
 	 radians: 2 * Math.PI,
 	 opacityArea: 0.5,
 	 ToRight: 5,
-	 TranslateX: 80,
+	 TranslateX: 120,
 	 TranslateY: 30,
 	 ExtraWidthX: 100,
 	 ExtraWidthY: 100,
@@ -64,7 +64,7 @@ var RadarChart = {
 	   .attr("x2", function(d, i){return levelFactor*(1-cfg.factor*Math.sin((i+1)*cfg.radians/total));})
 	   .attr("y2", function(d, i){return levelFactor*(1-cfg.factor*Math.cos((i+1)*cfg.radians/total));})
 	   .attr("class", "line")
-	   .style("stroke", "grey")
+	   .style("stroke", "#FFFFFF")
 	   .style("stroke-opacity", "0.75")
 	   .style("stroke-width", "0.3px")
 	   .attr("transform", "translate(" + (cfg.w/2-levelFactor) + ", " + (cfg.h/2-levelFactor) + ")");
@@ -80,10 +80,11 @@ var RadarChart = {
 	   .attr("x", function(d){return levelFactor*(1-cfg.factor*Math.sin(0));})
 	   .attr("y", function(d){return levelFactor*(1-cfg.factor*Math.cos(0));})
 	   .attr("class", "legend")
+     .attr("fill", "#FFFFFF")
 	   .style("font-family", "sans-serif")
 	   .style("font-size", "10px")
 	   .attr("transform", "translate(" + (cfg.w/2-levelFactor + cfg.ToRight) + ", " + (cfg.h/2-levelFactor) + ")")
-	   .attr("fill", "#737373")
+	   .attr("fill", "#FFFFFF")
 	   .text(Format((j+1)*cfg.maxValue/cfg.levels));
 	}
 
@@ -101,14 +102,15 @@ var RadarChart = {
 		.attr("x2", function(d, i){return cfg.w/2*(1-cfg.factor*Math.sin(i*cfg.radians/total));})
 		.attr("y2", function(d, i){return cfg.h/2*(1-cfg.factor*Math.cos(i*cfg.radians/total));})
 		.attr("class", "line")
-		.style("stroke", "grey")
+		.style("stroke", "#FFFFFF")
 		.style("stroke-width", "1px");
 
 	axis.append("text")
 		.attr("class", "legend")
+    .attr("fill", "#FFFFFF")
 		.text(function(d){return d})
 		.style("font-family", "sans-serif")
-		.style("font-size", "11px")
+		.style("font-size", "14px")
 		.attr("text-anchor", "middle")
 		.attr("dy", "1.5em")
 		.attr("transform", function(d, i){return "translate(0, -10)"})
