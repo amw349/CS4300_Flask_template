@@ -2,9 +2,11 @@ from parsers_and_TFidf_setup import *
 from numpy import linalg as LA
 from scipy.sparse.linalg import svds
 from sklearn.preprocessing import normalize
+from scipy.sparse import load_npz
 import csv
 import os
 import numpy as np
+import ast
 
 good_tags={}
 # dict has keys = goodtag and values equal to list where the elements are avglikes, likescore, and totalposts
@@ -59,7 +61,7 @@ def top_cosine_sim(post_dic, input_vec, td_mat):
 
 def top_n_tags(n, top_posts):
     tags = []
-    #sorted_posts = reversed(sorted(top_posts, key = lambda x : x['numberLikes']))
+        #sorted_posts = reversed(sorted(top_posts, key = lambda x : x['numberLikes']))
     for post in top_posts:
         for tag in post['tags']:
             tags.append(tag)
@@ -92,65 +94,64 @@ def input_vec(word_to_int_dict, keywords):
             vec[word_to_int_dict[w]] = 1
     return vec
 
+
+def pp(v,int_to_word_dict):
+    lst = []
+    for count, x in enumerate(v):
+        if x!=0:
+            lst.append(int_to_word_dict[count])
+    #print (lst)
+
 def input_to_tags(input_text, td_mat, word_to_int_dict, post_dict, int_to_word_dict, k=10):
+    #print(len(post_dict))
+    #print(td_mat.shape)
     cosine_sims=[]
     top_posts=[]
+    top_tags = []
     count=0
     keywords = cleanup(input_text)
-    words_compressed = np.load(os.getcwd()+'/app/irsystem/models/words_compressed.npy')
-    words_compressed = np.transpose(words_compressed)
-    words_compressed = normalize(words_compressed, axis = 1)
-    avg_input_vec = np.zeros(words_compressed.shape[1])
+    v = input_vec(word_to_int_dict, keywords)
+    #mat = normalize(td_mat, axis=1)
+    cosine_sims = np.dot(td_mat, v)
+    cosine_sims_new = np.argsort(cosine_sims)[::-1]
+    top_tag_lists = []
+    pp(td_mat[cosine_sims_new[0]], int_to_word_dict)
 
-    for word in keywords:
-        if word in word_to_int_dict:
-            count = count + 1
-            avg_input_vec = avg_input_vec + words_compressed[word_to_int_dict[word]]
-    try:
-        avg_input_vec = avg_input_vec / count
-    except:
-        avg_input_vec = 0
+    for e in cosine_sims_new:
+        for tag in post_dict[e]:
+            if tag[1:] in good_tags:
+                top_tag_lists.append(tag)
 
-    for row in words_compressed:
-        cosine_sims.append(np.dot(avg_input_vec, row))
+    # while(len(top_tags)<10):
+    #     print("here")
+    #     for tag in top_tag_lists:
+    #         print("here2")
+    #         if tag not in top_tags:
+    #             top_tags.append(tag)
+    final_tags = []
+    for x in top_tag_lists[:10]:
+        final_tags.append((x, good_tags[x[1:]][1]))
+    return final_tags
+    print(final_tags)
 
-    cosine_sims = np.argsort(cosine_sims)[::-1]
-    top_words = [int_to_word_dict[i] for i in cosine_sims]
-    vec = input_vec(word_to_int_dict, top_words[:10])
-
-    post_scores = []
-    for i in range(0, td_mat.shape[0]):
-        sim = np.dot(td_mat[i], vec)
-        sim = sim / ((LA.norm(vec)) * (LA.norm(td_mat[i])))
-        post_scores.append(sim)
-    post_arg_scores = np.argsort(post_scores)[::-1]
-    top_tags = [(post_dict[j], post_scores[j]) for j in post_arg_scores]
-    final_lst = []
-    for tup in top_tags:
-        for tag in tup[0]:
-            final_lst.append((tag, tup[1]))
-
-    return final_lst[:10]
 
 if __name__ == "__main__":
-    print("reading word to int")
-    word_to_int = {}
+    #print("reading word to int")
+    word_to_int_dict = {}
+    int_to_word_dict = {}
     with open("word_to_int.csv", 'rb') as f:
         mycsv = csv.reader(f, delimiter = ",")
         for x, row in enumerate(mycsv):
             if x!=0:
-                mydict[row[0]] = int(row[1])
-    print("reading post to tags")
+                word_to_int_dict[row[0]] = int(row[1])
+                int_to_word_dict[int(row[1])] = row[0]
+    #print("reading post to tags")
     post_dict = {}
-    with open("/post_dict.csv", 'rb') as f:
+    with open("post_dict.csv", 'rb') as f:
         mycsv = csv.reader(f, delimiter = ",")
         for x, row in enumerate(mycsv):
             if x!=0:
-                mydict[row[0]] = (row[1])
-    print(input_to_tags("merry christmas", word_to_int_dict, post_dict, int_to_word_dict, k=10))
-
-
-#    word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \
-#    word_TDF, tag_TDF, word_inv_idx, tag_inv_idx, post_dict, word_TF_IDF, doc_norms, idf_dict = process_list_of_jsons(['atighteru.json', 'balous_friends.json'])
-
-#    print(input_to_tags("merry christmas", word_TDF, word_to_int_dict, post_dict, int_to_word_dict, k=10))
+                post_dict[int(row[0])] = ast.literal_eval(row[1])
+    sparse_mat = load_npz('word_TF_IDF.npz')
+    TF_IDF_matrix = np.asarray(sparse_mat.todense())
+    print(input_to_tags("merry christmas", TF_IDF_matrix, word_to_int_dict, post_dict, int_to_word_dict, k=10))

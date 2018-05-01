@@ -125,16 +125,16 @@ word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \
     word_TDF, tag_TDF, word_inv_idx, tag_inv_idx, post_dict, word_TF_IDF, doc_norms, idf_dict = process_list_of_jsons(serve_jsons())
 # print(tag_inv_idx)
 # print(post_dict)
-print(word_to_int_dict)
+#print(word_to_int_dict)
 
-with open('goodwords.csv', 'w') as csvfile:
-    fieldnames = ['goodword', 'avglikes', 'likescore', 'totalposts']
-    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+# with open('goodwords.csv', 'w') as csvfile:
+#     fieldnames = ['goodword', 'avglikes', 'likescore', 'totalposts']
+#     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
-    writer.writeheader()
+#     writer.writeheader()
 
-    for k in goodwords.keys():
-        writer.writerow({'goodword': k, 'avglikes': avglikes[k], 'likescore': assoclist[k], 'totalposts':totalposts[k]})
+#     for k in goodwords.keys():
+#         writer.writerow({'goodword': k, 'avglikes': avglikes[k], 'likescore': assoclist[k], 'totalposts':totalposts[k]})
 
 with open('word_to_int.csv', 'w') as csvfile:
     fieldnames = ['word', 'index']
@@ -145,14 +145,14 @@ with open('word_to_int.csv', 'w') as csvfile:
     for k in word_to_int_dict.keys():
         writer.writerow({'word': k, 'index':word_to_int_dict[k]})
 
-with open('inverted_index.csv', 'w') as csvfile:
-    fieldnames = ['word', 'numpyarray']
-    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+# with open('inverted_index.csv', 'w') as csvfile:
+#     fieldnames = ['word', 'numpyarray']
+#     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
-    writer.writeheader()
+#     writer.writeheader()
 
-    for k in tag_inv_idx.keys():
-        writer.writerow({'word': k, 'numpyarray':np.array2string(tag_inv_idx[k], precision=2, separator=',', suppress_small=True)})
+#     for k in tag_inv_idx.keys():
+#         writer.writerow({'word': k, 'numpyarray':np.array2string(tag_inv_idx[k], precision=2, separator=',', suppress_small=True)})
 
 with open('post_dict.csv', 'w') as csvfile:
     fieldnames = ['post', 'tags']

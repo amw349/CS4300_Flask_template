@@ -89,16 +89,16 @@ def process_list_of_jsons(lst_of_jsons):
                     tmp = str(tag)
                     new_tags.append(tmp)
                 tokenized_description = prepareDescription(description)
-                if len(tags) != 0:#don't count posts with no tags at least for now
+                if len(tags) != 0 and len(description) != 0:#don't count posts with no tags at least for now
                     for d_token in tokenized_description:
                         if d_token not in bad_words:
                             if(d.check(d_token)):
                                 word_set.add(d_token)
 
-                            if d_token in word_freq_dict:
-                                word_freq_dict[d_token] += 1
-                            else:
-                                word_freq_dict[d_token]=1
+                                if d_token in word_freq_dict:
+                                    word_freq_dict[d_token] += 1
+                                else:
+                                    word_freq_dict[d_token]=1
 
 
                     for t_token in new_tags:
