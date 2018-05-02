@@ -8,6 +8,22 @@ import enchant
 
 d = enchant.Dict("en_US")
 
+bad_words = {'a', 'about','above','after','again','against','all','am','an','and','any',\
+             'are','aren','as','at','be','because','been','before','being','below','between',\
+             'both','but','by','can','cannot','could','couldn','did','didn','do','does','doesn',\
+             'doing','don','down','during','each','few','for','from','further','had','hadn','has',\
+             'hasn','have','haven','having','he','here','hers','herself','him','himself','his','how',\
+             't','i','d','ll','m','ve','if','in','into','is','isn','it','its','itself','let','me','more',\
+             'most','mustn','my','myself','no','nor','not','of','off','on','once','only','or','other',\
+             'ought','our','ours','ourselves','out','over','own','same','shan','she','should','shouldn',\
+             'so','some','such','than','that','the','their','theirs','them','themselves','then','there',\
+             'they','this','those','through','to','too','under','until','up','very','was','wasn','we',\
+             'were','weren','what','what','when','where','which','while','who','whom','why','with','won',\
+             'would','wouldn','you','your','yours','yourself', 'yourselves',
+             'sure', 'today', 'yet', 'yes', 'yesterday', 'yeah', 'wow', 'whenever', 'wherever', 'sen', 'sept', 'poi'
+             'one', 'hey', 'hello', 'hath', 'erg', 'est', 'err', 'cert'
+}
+
 """takes in a list of strings representing
 json objects (which must be in the current directory)
 and treats each post like a document. Returns a
@@ -35,8 +51,6 @@ returns:
 
 
 """
-#To do: filter words used only by a single profile
-
 def fallback_tags(lst_of_wrds, loc=""):
     tags = []
     n = len(lst_of_wrds)
@@ -59,18 +73,6 @@ def process_list_of_jsons(lst_of_jsons):
     word_freq_dict = {}
     num_jsons_tag_appears_in = {}
     post_count = 0
-    bad_words = {'',' ','  ', ',' '!', 'a', 'about','above','after','again','against','all','am','an','and','any',\
-                 'are','aren','as','at','be','because','been','before','being','below','between',\
-                 'both','but','by','can','cannot','could','couldn','did','didn','do','does','doesn',\
-                 'doing','don','down','during','each','few','for','from','further','had','hadn','has',\
-                 'hasn','have','haven','having','he','here','hers','herself','him','himself','his','how',\
-                 't','i','d','ll','m','ve','if','in','into','is','isn','it','its','itself','let','me','more',\
-                 'most','mustn','my','myself','no','nor','not','of','off','on','once','only','or','other',\
-                 'ought','our','ours','ourselves','out','over','own','same','shan','she','should','shouldn',\
-                 'so','some','such','than','that','the','their','theirs','them','themselves','then','there',\
-                 'they','this','those','through','to','too','under','until','up','very','was','wasn','we',\
-                 'were','weren','what','what','when','where','which','while','who','whom','why','with','won',\
-                 'would','wouldn','you','your','yours','yourself', 'yourselves'}
 
     for json_name in lst_of_jsons:
         data = {}
@@ -81,7 +83,7 @@ def process_list_of_jsons(lst_of_jsons):
 
         for post in posts:
             #posts with no tags or captions still included
-            try:
+            if True:
                 description = post['description']
                 tags = post['tags']
                 new_tags = []
@@ -89,25 +91,22 @@ def process_list_of_jsons(lst_of_jsons):
                     tmp = str(tag)
                     new_tags.append(tmp)
                 tokenized_description = prepareDescription(description)
-                if len(tags) != 0 and len(description) != 0:#don't count posts with no tags at least for now
+                if len(tags) != 0 and len(tokenized_description)!=0:#don't count posts with no tags at least for now
                     for d_token in tokenized_description:
-                        if d_token not in bad_words:
-                            if(d.check(d_token)):
-                                word_set.add(d_token)
+                        #word_set.add(d_token)
 
-                                if d_token in word_freq_dict:
-                                    word_freq_dict[d_token] += 1
-                                else:
-                                    word_freq_dict[d_token]=1
+                        if d_token in word_freq_dict:
+                            word_freq_dict[d_token] += 1
+                        else:
+                            word_freq_dict[d_token]=1
 
 
                     for t_token in new_tags:
                         tag_set.add(prepareTag(t_token))
                         json_tag_set.add(prepareTag(t_token))
-                    post_dict[post_count] = new_tags
+                    post_dict[post_count] = tokenized_description
                     post_count += 1
-            except:
-                pass
+
         for tag in json_tag_set:
             if tag in num_jsons_tag_appears_in:
                 num_jsons_tag_appears_in[tag]+=1
@@ -121,7 +120,9 @@ def process_list_of_jsons(lst_of_jsons):
         if num_jsons_tag_appears_in[tag]>1:
             tag_set.add(tag)
 
-    sorted_words = sorted(word_set)
+    idf_dict = computeIDF_dict(word_freq_dict, num_posts, min_df=2)
+    
+    sorted_words = sorted(idf_dict.keys())
     sorted_tags = sorted(tag_set)
 
     word_to_int_dict = {}
@@ -142,22 +143,26 @@ def process_list_of_jsons(lst_of_jsons):
             int_to_tag_dict[i]=tag
     #now go back and create the TFidf as well as the inverted index
 
+
     num_words = len(word_to_int_dict)
     num_tags = len(tag_to_int_dict)
-
-    word_TDF = np.zeros((num_posts,num_words))
-    tag_TDF = np.zeros((num_posts,num_tags))
+    
+    
+    
+    word_TDF    = np.zeros((num_posts,num_words))
     word_TF_IDF = np.zeros((num_posts,num_words))
 
-    idf_dict = computeIDF_dict(word_freq_dict, num_posts)
-    # idf_array = computeIDF_array(word_freq_dict, int_to_word_dict, num_posts)
+    tag_TDF = np.zeros((num_posts,num_tags))
+
+    
 
     tag_inv_idx = {}
 
-    #create the empty word_inv_idx
+    #create the empty word_inv_idx - currently unused and empty
+    word_inv_idx = [[]]
     #word_inv_idx = [[] for _ in range(num_words)] #use this if in for python3
     #tag_inv_idx = [[] for _ in range(num_tags)] #use this if in for python3
-    word_inv_idx = [list([]) for _ in xrange(num_words)]
+    #word_inv_idx = [list([]) for _ in xrange(num_words)]
     #tag_inv_idx = [list([]) for _ in xrange(num_tags)]
     doc_norms = np.zeros(num_posts)
     #print (idf)
@@ -169,7 +174,7 @@ def process_list_of_jsons(lst_of_jsons):
             data = json.load(f)
         posts = data['posts']
         for post in posts:
-            try:
+            if True:
                 description = post['description']
                 tags = post['tags']
                 new_tags = []
@@ -179,50 +184,48 @@ def process_list_of_jsons(lst_of_jsons):
                 tokenized_description = prepareDescription(description)
 
                 idf_score_sq_sum = 0
-                if len(tags) != 0:#don't count posts with no tags at least for this application
+                if len(tags) != 0 and len(tokenized_description)!=0:#don't count posts with no tags at least for this application
                     for d_token in tokenized_description:
                         if d_token in idf_dict:
                             word_TDF[post_counter,word_to_int_dict[d_token]] = 1
 
                             #Adds the current post to the list of posts matched to that word
-                            word_inv_idx[word_to_int_dict[d_token]].append(post_counter)
+                            #word_inv_idx[word_to_int_dict[d_token]].append(post_counter)
                             idf_score_sq_sum += idf_dict[d_token]**2
-
+                            
                             word_TF_IDF[post_counter,word_to_int_dict[d_token]] = idf_dict[d_token]
-
-                    for t_token in new_tags:
-                        t_token = prepareTag(t_token)#remove the leading hashtag
-
-                        if t_token in tag_to_int_dict:
-
-                            tag_TDF[post_counter,tag_to_int_dict[t_token]] = 1
-                            #Adds the current post index to the list of posts matched to that word
-
-                            if t_token in tag_count:
-                                tag_count[t_token] += 1
-                            else:
-                                tag_count[t_token] = 1
-
-                            if t_token in tag_inv_idx:
-                                tag_inv_idx[t_token] += tf_idf_vectorize(tokenized_description,idf_dict,word_to_int_dict)
-                            else:
-                                tag_inv_idx[t_token] = tf_idf_vectorize(tokenized_description,idf_dict,word_to_int_dict)
-                    doc_norms[post_counter] = math.sqrt(idf_score_sq_sum)
+                    
+                    # for t_token in new_tags:
+                    #     t_token = prepareTag(t_token)#remove the leading hashtag
+                    # 
+                    #     if t_token in tag_to_int_dict:
+                    # 
+                    #         #tag_TDF[post_counter,tag_to_int_dict[t_token]] = 1
+                    #         #Adds the current post index to the list of posts matched to that word
+                    # 
+                    #         #if t_token in tag_count:
+                    #         #    tag_count[t_token] += 1
+                    #         #else:
+                    #         #    tag_count[t_token] = 1
+                    # 
+                    #         if t_token in tag_inv_idx:
+                    #             tag_inv_idx[t_token] += tf_idf_vectorize(tokenized_description,idf_dict,word_to_int_dict)
+                    #         else:
+                    #             tag_inv_idx[t_token] = tf_idf_vectorize(tokenized_description,idf_dict,word_to_int_dict)
+                    if math.sqrt(idf_score_sq_sum) != 0:
+                        word_TF_IDF[post_counter] /= math.sqrt(idf_score_sq_sum)
                     post_counter += 1
                     #print(post_counter)
-            except:
-                pass
 
-    for tag in tag_inv_idx:
-        tag_inv_idx[tag] = tag_inv_idx[tag]/tag_count[tag]
-    # print (tag_to_int_dict)
-    # print(tag_inv_idx)
+    # assert ((len(post_dict) == word_TDF.shape[0]))
+    assert (len(idf_dict) == len(word_to_int_dict))
+
     return word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \
     word_TDF, tag_TDF, word_inv_idx, tag_inv_idx, post_dict, word_TF_IDF, doc_norms, idf_dict
 
 
 def tf_idf_vectorize(word_lst,idf_dict, word_to_int_dict):
-    vec = np.zeros(len(idf_dict))
+    vec = np.zeros(len(word_to_int_dict))
     for w in word_lst:
         if w in idf_dict:
             vec[word_to_int_dict[w]] = idf_dict[w]
@@ -230,13 +233,26 @@ def tf_idf_vectorize(word_lst,idf_dict, word_to_int_dict):
 
 "takes the text and returns a list of strings"
 def prepareDescription(text):
-    #print ("remove emogies started")
-    text = removeEmojies(text)
-    #print ("strip links started")
-    text = strip_links(text)
-    #print ("removeNonAlpha")
-    text = removeNonAlpha(text)
-    return text
+    try:
+        text = removeEmojies(text)
+        text = strip_links(text)
+
+        word_lst = removeNonAlpha(text)
+        
+        good_word_lst = removeBadAndNoneWords(word_lst)
+    except:
+        #print ("exception while parsing: not a big deal but want to see how may times this gets thrown")
+        good_word_lst = []
+    return good_word_lst
+
+def removeBadAndNoneWords(text):
+    lst = []
+    for d_token in text:
+        if d_token != '':
+            if d_token not in bad_words and d.check(d_token) and len(d_token)>2:
+                lst.append(d_token)
+    return lst
+
 
 def removeEmojies(text):
     emoji_pattern = re.compile("["
@@ -246,8 +262,6 @@ def removeEmojies(text):
     "\U0001F1E0-\U0001F1FF"  # flags (iOS)
                        "]+", flags=re.UNICODE)
     #emoji_pattern= re.compile('[\U00010000-\U0010ffff]', flags=re.UNICODE)
-
-    #print (text)
     clean =emoji_pattern.sub(r'', text) # no emoji
     return clean
 
@@ -259,10 +273,6 @@ def strip_links(text):
     return text
 
 def removeNonAlpha(text):
-    #m = re.match((r"([a-zA-Z]*)"), "a@!# clean&#@string")
-    #g = m.groups()
-    #print g
-    #return g
     lst = []
     for i in text:
         if i.isalpha():
@@ -278,12 +288,12 @@ def prepareTag(tag):
     return tag[1:].lower()
 
 #returns a dict of words to their IDF scores (eg. idf['dog']=.2)
-def computeIDF_dict(word_freq_dict, num_docs, min_df=1, max_df_ratio=0.95):
+def computeIDF_dict(word_freq_dict, num_docs, min_df, max_df_ratio=0.95):
     idf={}
     # YOUR CODE HERE
     for key in word_freq_dict:
         word_freq = word_freq_dict[key]
-        if word_freq>=min_df and word_freq/num_docs<=max_df_ratio:
+        if word_freq>=min_df: #and word_freq/num_docs<=max_df_ratio:
             N_over_1_plus_word_freq = num_docs/float(1+word_freq)
             IDFscore = math.log(N_over_1_plus_word_freq,2)
             idf[key]=IDFscore
@@ -302,9 +312,12 @@ def computeIDF_dict(word_freq_dict, num_docs, min_df=1, max_df_ratio=0.95):
 #             idf_array[i]=IDFscore
 #     return idf_array
 
-if __name__ == "__main__":
-    word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \
-    word_TDF, tag_TDF, word_inv_idx, tag_inv_idx, post_dict, word_TF_IDF, doc_norms, idf_dict = process_list_of_jsons(['profile_davidmiron.json', 'amandabisk.json'])#, 'andyspeer.json', 'profile_alexisren.json'])
+# if __name__ == "__main__":
+#     word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \
+#     word_TDF, tag_TDF, word_inv_idx, tag_inv_idx, post_dict, word_TF_IDF, doc_norms, idf_dict = process_list_of_jsons(['profile_davidmiron.json', 'amandabisk.json'])#, 'andyspeer.json', 'profile_alexisren.json'])
+
+    
+
 
     #print(doc_norms)
 #
