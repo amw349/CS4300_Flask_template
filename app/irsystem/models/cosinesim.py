@@ -106,44 +106,29 @@ def pp(v,int_to_word_dict):
     for count, x in enumerate(v):
         if x!=0:
             lst.append(int_to_word_dict[count])
-    #print (lst)
+    print (lst)
 
 def input_to_tags(input_text, td_mat, word_to_int_dict, post_dict, int_to_word_dict, k=10):
-    #print(len(post_dict))
-    #print(td_mat.shape)
     cosine_sims=[]
     top_posts=[]
     top_tags = []
     count=0
     keywords = cleanup(input_text)
     v = input_vec(word_to_int_dict, keywords)
-    #mat = normalize(td_mat, axis=1)
+    pp(v, int_to_word_dict)
+    v = v/LA.norm(v)#don't need to normalize input vec but make outputs understandable
     cosine_sims = np.dot(td_mat, v)
-    cosine_sims_new = np.argsort(cosine_sims)[::-1]
+    cosine_sims_idxs = np.argsort(cosine_sims)[::-1]
     top_tag_lists = []
-    pp(td_mat[cosine_sims_new[0]], int_to_word_dict)
 
-    for e in cosine_sims_new:
-        for tag in post_dict[e]:
-            if tag[1:] in good_tags:
-                top_tag_lists.append(tag)
-
-    # while(len(top_tags)<10):
-    #     print("here")
-    #     for tag in top_tag_lists:
-    #         print("here2")
-    #         if tag not in top_tags:
-    #             top_tags.append(tag)
-    final_tags = []
-    for x in top_tag_lists[:10]:
-        final_tags.append((x, good_tags[x[1:]][1]))
-    return final_tags
-    print(final_tags)
-    # words_compressed = np.load(os.getcwd()+'/app/irsystem/models/words_compressed.npy')
-    # words_compressed = np.transpose(words_compressed)
-    # words_compressed = normalize(words_compressed, axis = 1)
-    # avg_input_vec = np.zeros(words_compressed.shape[1])
-    # print ("words compressed shape:", words_compressed.shape)
+    pp(td_mat[cosine_sims_idxs[0]] ,int_to_word_dict)#prints the words coresponding to the top post
+    
+    best_score_and_best_coments = [(cosine_sims[cosine_sims_idxs[0]], post_dict[cosine_sims_idxs[0]]), \
+                   (cosine_sims[cosine_sims_idxs[1]], post_dict[cosine_sims_idxs[1]]), \
+                   (cosine_sims[cosine_sims_idxs[2]], post_dict[cosine_sims_idxs[2]]), \
+                   (cosine_sims[cosine_sims_idxs[3]], post_dict[cosine_sims_idxs[3]]), \
+                   (cosine_sims[cosine_sims_idxs[4]], post_dict[cosine_sims_idxs[4]])]
+    return best_score_and_best_coments
 
 
 if __name__ == "__main__":
@@ -163,6 +148,6 @@ if __name__ == "__main__":
         for x, row in enumerate(mycsv):
             if x!=0:
                 post_dict[int(row[0])] = ast.literal_eval(row[1])
-    sparse_mat = load_npz('word_TF_IDF.npz')
+    sparse_mat = load_npz('word_TDF.npz')
     TF_IDF_matrix = np.asarray(sparse_mat.todense())
-    print(input_to_tags("merry christmas", TF_IDF_matrix, word_to_int_dict, post_dict, int_to_word_dict, k=10))
+    print(input_to_tags("long day in the gym", TF_IDF_matrix, word_to_int_dict, post_dict, int_to_word_dict, k=10))
