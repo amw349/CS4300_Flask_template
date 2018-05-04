@@ -44,7 +44,6 @@ psycopg2==2.7.4
 pyasn1==0.4.2
 pycparser==2.14
 PyDictionary==1.5.2
-pyenchant==2.0.0
 PyJWT==1.4.0
 PyNaCl==1.2.1
 pyparsing==2.2.0

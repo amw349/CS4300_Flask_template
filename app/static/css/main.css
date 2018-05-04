@@ -1,6 +1,6 @@
 html, body {
   min-height: 100%;
-  color: #FFFFFF;
+  color: #000000;
   /* background-image: url('../images/instagram_gradient.jpg');
   background-position: center;
   background-size: cover; */
@@ -42,13 +42,44 @@ label{
   color: #FF0000;
 }
 
-.tag_buttons{
-  margin: .5% 0 .5% 0
+.insta-post-container{
+  background-color: #FFFFFF;
+  /* background: rgba(204, 204, 204, 0.5); */
 }
 
-.btn-info.tag_buttons{
-  background-color: transparent;
-  border-color: transparent;
+.flex-h-center{
+  display: flex;
+  justify-content: center;
+}
+
+.flex-v-center{
+  display: flex;
+  align-items: center;
+}
+
+.post-profile{
+  font-size: 20px;
+  font-weight: bold;
+  color: #000000;
+  margin-bottom: 0;
+}
+
+.post-location{
+  margin-bottom: 0;
+}
+
+th{
+  font-weight: normal;
+  border-bottom: .5px solid #A0A0A0;
+  padding-right: 1%;
+}
+
+td{
+  padding: 1% 5% 1% 0;
+}
+
+.tag_buttons{
+  color: #0C3E70;
 }
 
 .selected-hashtag-container{
@@ -90,7 +121,7 @@ label{
 }
 
 input{
-  /* text-align: center; */
+  text-align: center;
   font-weight: 200;
   color: #FFFFFF;
   font-size: 2em;
@@ -113,25 +144,16 @@ input{
   transition: color .2s ease-in-out,opacity .2s ease-in-out;
 }
 
-::placeholder{
+input::placeholder{
   color: #FFFFFF;
-}
-
-#insta_post {
-  width: 250px;
-  height: auto;
-}
-
-#insta-icon{
-  width: 100px;
-  height: auto;
-  z-index: 100;
+  /* text-align: center; */
 }
 
 footer{
   position: fixed;
   bottom: 0;
   padding: 1%;
+  color: #FFFFFF;
 }
 
 /* INITIAL PAGE ANIMATION */
@@ -143,6 +165,7 @@ footer{
     margin: 0 auto;
     border-right: 2px solid rgba(255,255,255,.75);
     font-size: 500%;
+    color: #FFFFFF;
     /* text-align: center; */
     white-space: nowrap;
     overflow: hidden;
@@ -167,3 +190,15 @@ footer{
 .results-container {
   padding: 5% 0 5% 0;
 }
+
+/* CHART */
+.bullet { font: 10px sans-serif; }
+.bullet .marker { stroke: #000; stroke-width: 2px; }
+.bullet .tick line { stroke: #666; stroke-width: .5px; }
+.bullet .range.s0 { fill: #eee; }
+.bullet .range.s1 { fill: #ddd; }
+.bullet .range.s2 { fill: #ccc; }
+.bullet .measure.s0 { fill: lightsteelblue; }
+.bullet .measure.s1 { fill: steelblue; }
+.bullet .chart-title { font-size: 14px; font-weight: bold; }
+.bullet .chart-subtitle { fill: #999; }

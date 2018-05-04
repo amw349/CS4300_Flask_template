@@ -16,10 +16,10 @@ spec:
     spec:
       containers:
       - name: flask
-        image: hashtagyourphoto/flaskapp:v2.8
+        image: hashtagyourphoto/flaskapp:v3.6
         env:
         - name: APP_SETTINGS
-          value: config.ProductionConfig
+          value: config.DevelopmentConfig
         - name: DATABASE_URL
           value: postgresql://localhost/my_app_db
         ports:

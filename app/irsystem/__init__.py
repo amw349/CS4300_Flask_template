@@ -4,5 +4,6 @@ from flask import Blueprint
 irsystem = Blueprint('irsystem', __name__, url_prefix='/',static_folder='static',template_folder='templates')
 
 # Import all controllers
-from controllers.search_controller import *
 from controllers.splash_controller import *
+from controllers.search_controller import *
+# from controllers.rocchio_controller import *

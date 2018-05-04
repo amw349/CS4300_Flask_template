@@ -1,7 +1,7 @@
 flask:
-    image: hashtagyourphoto/flaskapp:v2.8
+    image: hashtagyourphoto/flaskapp:v3.6
     ports:
       - "5000:5000"
     environment:
-    - APP_SETTINGS=config.ProductionConfig
+    - APP_SETTINGS=config.DevelopmentConfig
     - DATABASE_URL=postgresql://localhost/my_app_db

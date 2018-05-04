@@ -4,9 +4,7 @@ import numpy as np
 import re
 import os
 import math
-import enchant
 
-d = enchant.Dict("en_US")
 
 bad_words = {'a', 'about','above','after','again','against','all','am','an','and','any',\
              'are','aren','as','at','be','because','been','before','being','below','between',\
@@ -121,7 +119,7 @@ def process_list_of_jsons(lst_of_jsons):
             tag_set.add(tag)
 
     idf_dict = computeIDF_dict(word_freq_dict, num_posts, min_df=2)
-    
+
     sorted_words = sorted(idf_dict.keys())
     sorted_tags = sorted(tag_set)
 
@@ -146,15 +144,15 @@ def process_list_of_jsons(lst_of_jsons):
 
     num_words = len(word_to_int_dict)
     num_tags = len(tag_to_int_dict)
-    
-    
-    
+
+
+
     word_TDF    = np.zeros((num_posts,num_words))
     word_TF_IDF = np.zeros((num_posts,num_words))
 
     tag_TDF = np.zeros((num_posts,num_tags))
 
-    
+
 
     tag_inv_idx = {}
 
@@ -192,22 +190,22 @@ def process_list_of_jsons(lst_of_jsons):
                             #Adds the current post to the list of posts matched to that word
                             #word_inv_idx[word_to_int_dict[d_token]].append(post_counter)
                             idf_score_sq_sum += idf_dict[d_token]**2
-                            
+
                             word_TF_IDF[post_counter,word_to_int_dict[d_token]] = idf_dict[d_token]
-                    
+
                     # for t_token in new_tags:
                     #     t_token = prepareTag(t_token)#remove the leading hashtag
-                    # 
+                    #
                     #     if t_token in tag_to_int_dict:
-                    # 
+                    #
                     #         #tag_TDF[post_counter,tag_to_int_dict[t_token]] = 1
                     #         #Adds the current post index to the list of posts matched to that word
-                    # 
+                    #
                     #         #if t_token in tag_count:
                     #         #    tag_count[t_token] += 1
                     #         #else:
                     #         #    tag_count[t_token] = 1
-                    # 
+                    #
                     #         if t_token in tag_inv_idx:
                     #             tag_inv_idx[t_token] += tf_idf_vectorize(tokenized_description,idf_dict,word_to_int_dict)
                     #         else:
@@ -238,7 +236,7 @@ def prepareDescription(text):
         text = strip_links(text)
 
         word_lst = removeNonAlpha(text)
-        
+
         good_word_lst = removeBadAndNoneWords(word_lst)
     except:
         #print ("exception while parsing: not a big deal but want to see how may times this gets thrown")
@@ -316,7 +314,7 @@ def computeIDF_dict(word_freq_dict, num_docs, min_df, max_df_ratio=0.95):
 #     word_to_int_dict, tag_to_int_dict, int_to_word_dict, int_to_tag_dict, \
 #     word_TDF, tag_TDF, word_inv_idx, tag_inv_idx, post_dict, word_TF_IDF, doc_norms, idf_dict = process_list_of_jsons(['profile_davidmiron.json', 'amandabisk.json'])#, 'andyspeer.json', 'profile_alexisren.json'])
 
-    
+
 
 
     #print(doc_norms)

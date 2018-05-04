@@ -5,6 +5,7 @@ migrations
 vagrant/.vagrant
 vagrant/site.retry
 vagrant/a4keypair.pem
+.ipynb_checkpoints
 
 # Mac OS
 .DS_Store
