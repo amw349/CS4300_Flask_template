@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <script src="http://d3js.org/d3.v3.min.js" language="JavaScript"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
-    <script src="/static/js/RadarChart.js" language="JavaScript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
     <style>
         .liquidFillGaugeText { font-family: Helvetica; font-weight: bold; }
@@ -62,8 +61,8 @@
                                 </div>
                               </div>
                             </div>
-                            <div class="col-sm-2 flex-h-center" style="margin-top: 3%;">
-                              <img src="/static/images/dots_menu.png" alt="profile picture">
+                            <div class="col-sm-2 flex-h-center flex-v-center" style="font-size: 250%;">
+                              <p class="dots-menu">...</p>
                             </div>
                           </div>
                           <div class="row post-content-container">
@@ -81,8 +80,6 @@
                                   avg_likes.push(statistics_top_hashtags[hashtag]["avg_likes"])
                                   total_posts.push(statistics_top_hashtags[hashtag]["total_posts"])
                                 }
-                                console.log("labels:", hashtags);
-                                console.log("avg_likes:", avg_likes);
                                 var chart = document.getElementById("chart");
                                 var myBarChart = new Chart(chart, {
                                     type: 'horizontalBar',
